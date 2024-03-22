@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac136a43e9837bf4a8294a328157053b, type: 3}
+  m_Name: NewProjectile
+  m_EditorClassIdentifier: 
+  explosionEffectPrefab: {fileID: 7069714023965400197, guid: 745c850d0cc290d47a24a6b7b1da5124,
+    type: 3}
+  explosionParticleOffset: {x: 0, y: 1, z: 0}
+  audioSourcePrefab: {fileID: 1284458536530483197, guid: 0089fba5697fcfd4ab57c03777449ae8,
+    type: 3}
+  explosionDelay: 3
+  explosionForce: 100
+  explosionRadius: 50
