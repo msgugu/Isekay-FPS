@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0eb63b29eb98e9468d2f840743c53b8, type: 3}
   m_Name: SmokeGrenade
   m_EditorClassIdentifier: 
-  smokeEffectPrefab: {fileID: 0}
+  itemName: 
+  smokeEffectPrefab: {fileID: 6526933374117741907, guid: 255a7c4c7f2fe774880ddc4b34eee063, type: 3}
   smokeParticleOffset: {x: 0, y: 1, z: 0}
   smokeDelay: 1

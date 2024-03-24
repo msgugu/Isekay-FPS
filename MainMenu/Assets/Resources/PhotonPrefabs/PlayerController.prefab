@@ -3678,7 +3678,7 @@ MonoBehaviour:
   items:
   - {fileID: 3656912389362527166}
   - {fileID: 1675664161708090021}
-  - {fileID: 3190672039014568332}
+  - {fileID: 8807766210504788326}
 --- !u!114 &7762403657780208694
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6469,7 +6469,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6317373156091336570}
   - component: {fileID: 3011479096031345740}
-  - component: {fileID: 3190672039014568332}
+  - component: {fileID: 8807766210504788326}
   m_Layer: 0
   m_Name: Smoke
   m_TagString: Untagged
@@ -6515,7 +6515,7 @@ MonoBehaviour:
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &3190672039014568332
+--- !u!114 &8807766210504788326
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -6524,17 +6524,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 7585637463406462775}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0bb0c86dfc230f34dbf8abd02766eebb, type: 3}
+  m_Script: {fileID: 11500000, guid: 2c66984cc4305834998203ff8e5a1cb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   itemInfo: {fileID: 11400000, guid: 47afa028e37a0c2439f9629cd5228804, type: 2}
   itemGameObject: {fileID: 3008714641612574896}
   cam: {fileID: 1865736387665017854}
   attackPoint: {fileID: 6317373156091336570}
-  objectToThrow: {fileID: 3429303788558742563}
-  totalThrows: 10
-  throwCooldown: 3
-  throwKey: 323
+  objectToThrow: {fileID: 4711215858257944281, guid: 91a56fd5aabf62e4d9b799f6a20a3967, type: 3}
+  throwCooldown: 5
   throwForce: 5
   throwUpwardForce: 5
 --- !u!1 &7599530402964128345
@@ -8217,6 +8215,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7855269707616818142}
     m_Modifications:
+    - target: {fileID: 463986791304156507, guid: 91a56fd5aabf62e4d9b799f6a20a3967, type: 3}
+      propertyPath: smokeEffectInstance
+      value: 
+      objectReference: {fileID: 6526933374117741907, guid: 255a7c4c7f2fe774880ddc4b34eee063, type: 3}
     - target: {fileID: 4711215858257944281, guid: 91a56fd5aabf62e4d9b799f6a20a3967, type: 3}
       propertyPath: m_Name
       value: SmokeGrenade
@@ -8266,11 +8268,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 91a56fd5aabf62e4d9b799f6a20a3967, type: 3}
---- !u!1 &3429303788558742563 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4711215858257944281, guid: 91a56fd5aabf62e4d9b799f6a20a3967, type: 3}
-  m_PrefabInstance: {fileID: 7995803025490258682}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &3474158625801643632 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6827594070120139914, guid: 91a56fd5aabf62e4d9b799f6a20a3967, type: 3}
