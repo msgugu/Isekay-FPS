@@ -14,7 +14,10 @@ public class SingleShotGun : Gun
     }
     public override void Use()
     {
-        Shoot();
+        if(PV.IsMine)
+        {
+            Shoot();
+        }
     }
 
     void Shoot()

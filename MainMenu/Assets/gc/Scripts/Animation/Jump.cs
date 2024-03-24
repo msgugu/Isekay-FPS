@@ -1,14 +1,16 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Isekai.GC.Ani
 {
-
+    
     public class Jump : StateMachineBehaviourBase
     {
-        private float _force = 10.0f;
+        private float _force = 5.0f;
         private Rigidbody _rigidbody;
+        PhotonView PV;
 
         public override void Init(PlayerMove controller)
         {
@@ -29,10 +31,25 @@ namespace Isekai.GC.Ani
         public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
             base.OnStateEnter(animator, stateInfo, layerIndex);
-            animator.transform.position += Vector3.up * 0.3f;
-            _rigidbody = animator.GetComponent<Rigidbody>();
-            _rigidbody.AddForce(Vector3.up * _force, ForceMode.Impulse);
-            
+            if(PV == null)
+            {
+                PV = animator.GetComponent<PhotonView>();
+                if (PV == null)
+                {
+                    PV = animator.GetComponentInParent<PhotonView>();
+                }
+            }
+
+            if (PV != null && PV.IsMine)
+            {
+                animator.transform.position += Vector3.up * 0.3f;
+                if (_rigidbody == null)
+                { 
+                    _rigidbody = animator.GetComponent<Rigidbody>();
+                }
+                _rigidbody.AddForce(Vector3.up * _force, ForceMode.Impulse);
+            }
+
         }
 
 

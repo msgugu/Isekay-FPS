@@ -260,7 +260,6 @@ GameObject:
   - component: {fileID: 3106986063887893911}
   - component: {fileID: 6783573248621559962}
   - component: {fileID: 831362535611366569}
-  - component: {fileID: 3319727559760142864}
   m_Layer: 0
   m_Name: SmokeGrenade
   m_TagString: Untagged
@@ -335,19 +334,6 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.057474047
   m_Center: {x: -0.006324224, y: 0.014048665, z: 0.0035137034}
---- !u!114 &3319727559760142864
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3801000840812386244}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0bb0c86dfc230f34dbf8abd02766eebb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  smokeGrenadeData: {fileID: 11400000, guid: 3f60e2b411334b04cb0b5a10603f04cc, type: 2}
 --- !u!1 &7741386441543422852
 GameObject:
   m_ObjectHideFlags: 0

@@ -4,11 +4,11 @@ using System.IO.Enumeration;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "NewSmokeGrenadeData", menuName = "SmokeGrenade Data")]
-public class SmokeGrenadeData : ScriptableObject
+public class SmokeGrenadeData : ItemInfo
 { 
     [Header("Smoke Prefab")]
-    public GameObject smokeEffectPrefab; // smokegrenade È¿°ú ÇÁ¸®ÆÕ
-    public Vector3 smokeParticleOffset = new Vector3(0, 1, 0); // smoke È¿°ú À§Ä¡ Á¶Á¤
+    public GameObject smokeEffectPrefab; // smokegrenade íš¨ê³¼ í”„ë¦¬íŒ¹
+    public Vector3 smokeParticleOffset = new Vector3(0, 1, 0); // smoke íš¨ê³¼ ìœ„ì¹˜ ì¡°ì •
    // public GameObject audioSourcePrefab;
 
     [Header("Smoke Settings")]

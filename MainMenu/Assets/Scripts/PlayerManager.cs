@@ -22,17 +22,21 @@ public class PlayerManager : MonoBehaviour
     }
     void Start()
     {
-        if(PV.IsMine)
+        Debug.Log("플레이어 매니저 ");
+
+        if (PV.IsMine)
         {
             CreateController();
+            Debug.Log("캐릭생성");
         }
     }
 
     void CreateController()
     {
         Transform spawnpint =SpawnManager.instance.GetSpawnpoint();
-       controller =  PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerController"), 
+        controller =  PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerController"), 
                                                 spawnpint.position, spawnpint.rotation,0, new object[] {PV.ViewID});
+        Debug.Log(controller.name);
     }
 
     public void Die()

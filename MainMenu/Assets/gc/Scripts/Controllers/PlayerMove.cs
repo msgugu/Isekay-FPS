@@ -2,12 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Isekai.GC.Ani;
+using Photon.Pun;
 
 namespace Isekai.GC
 {
-    public class PlayerMove : MonoBehaviour
+    public class PlayerMove : MonoBehaviour// IPunObservable
     {
-        
+
+        PhotonView PV;
+        PhotonAnimatorView PAni;
+
         //카메라 위치 잡는거
         [SerializeField] GameObject cameraHolder;
 
@@ -41,6 +45,13 @@ namespace Isekai.GC
         {
             _animator = GetComponent<Animator>();
             rb = GetComponent<Rigidbody>();
+            PV = GetComponent<PhotonView>();
+            PAni = GetComponent<PhotonAnimatorView>();
+            if (!PV.IsMine)
+            {
+                Destroy(GetComponentInChildren<Camera>().gameObject);
+            }
+            
         }
 
         private void Start()
@@ -54,6 +65,7 @@ namespace Isekai.GC
 
         private void Update()
         {
+            if (!PV.IsMine) return;
             LookRotate();
             Zoom();
         }
@@ -61,9 +73,9 @@ namespace Isekai.GC
         /// <summary>
         /// 플레이어 이동 관련
         /// </summary>
-        private void FixedUpdate()
+        private void FixedUpdate()    
         {
-
+            if (!PV.IsMine) return;
             _speedGain = Input.GetKey(KeyCode.LeftShift) ? 2.5f : 1;
 
             _horizontal = Input.GetAxis("Horizontal") * _speedGain * speed;
@@ -80,6 +92,8 @@ namespace Isekai.GC
         /// </summary>
         private void LateUpdate()
         {
+            if (!PV.IsMine) return;
+
             _animator.SetFloat("turn", _mouseX);
             _animator.SetFloat("PosX", _horizontal);
             _animator.SetFloat("PosZ", _vertical);
@@ -111,22 +125,23 @@ namespace Isekai.GC
             cameraHolder.transform.localEulerAngles = Vector3.left * _verticalLookRotation;
         }
 
-        
-
         /// <summary>
         /// 마우스 오른쪽키 누르면 줌땡겨짐
         /// </summary>
         private void Zoom()
         {
-            if (Input.GetMouseButton(1))
+            if (PV.IsMine)
             {
-                isZoom = true;
-                Camera.main.fieldOfView = Mathf.Lerp(Camera.main.fieldOfView, zoomFOV, Time.deltaTime * 5f);
-            }
-            else
-            {
-                isZoom = false;
-                Camera.main.fieldOfView = Mathf.Lerp(Camera.main.fieldOfView, normalFOV, Time.deltaTime * 5f);
+                if (Input.GetMouseButton(1))
+                {
+                    isZoom = true;
+                    Camera.main.fieldOfView = Mathf.Lerp(Camera.main.fieldOfView, zoomFOV, Time.deltaTime * 5f);
+                }
+                else
+                {
+                    isZoom = false;
+                    Camera.main.fieldOfView = Mathf.Lerp(Camera.main.fieldOfView, normalFOV, Time.deltaTime * 5f);
+                }
             }
         }    
     }
