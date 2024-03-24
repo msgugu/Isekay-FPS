@@ -22,7 +22,7 @@ public class Throwing : Grenade
     bool readyToThrow; // 던지기 가능한지 여부를 나타내는 플래그
     PhotonView PV;
     private SmokeGrenadeData _data;
-    //private float countdown; // 폭발까지 남은 시간  
+    private float countdown; // 폭발까지 남은 시간  
     //private bool hasExploded = false; // 폭발 여부
     private GameObject smokeEffectInstance; // 생성된 폭발 효과 인스턴스
 
@@ -31,7 +31,7 @@ public class Throwing : Grenade
     {
         PV = GetComponent<PhotonView>();
         _data = (SmokeGrenadeData)itemInfo;
-        //countdown = _data.smokeDelay; // 폭발 딜레이 초기화
+        countdown = _data.smokeDelay; // 폭발 딜레이 초기화
     }
     public override void Use()
     {
@@ -70,7 +70,7 @@ public class Throwing : Grenade
         //totalThrows--; // 던진 횟수 감소
 
         // 던지기 쿨다운 적용
-        Invoke(nameof(ResetThrow), throwCooldown);
+        Invoke(nameof(ResetThrow), countdown);
     }
 
     private void ResetThrow()

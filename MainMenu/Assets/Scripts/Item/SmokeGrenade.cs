@@ -4,17 +4,18 @@ using System.IO;
 
 public class SmokeGrenade : MonoBehaviour
 {
+    public GameObject smokeEff;
+
     private float countdown; // 폭발까지 남은 시간  
     private bool hasExploded = false; // 폭발 여부
     GameObject smokeEffectInstance; // 생성된 폭발 효과 인스턴스
     PhotonView PV;
-    private SmokeGrenadeData _data;
+
 
     private void Awake()
     {
         PV = GetComponent<PhotonView>();
         //countdown = _data.smokeDelay; // 폭발 딜레이 초기화
-        _data = GetComponentInParent<SmokeGrenadeData>();
     }
 
     private void Start()
@@ -28,7 +29,7 @@ public class SmokeGrenade : MonoBehaviour
     {
         PV.RPC("RPC_Explode", RpcTarget.All);
         // 폭발 효과 생성
-        smokeEffectInstance = PhotonNetwork.Instantiate(_data.smokeEffectPrefab.name, transform.position + _data.smokeParticleOffset, Quaternion.identity);
+        smokeEffectInstance = PhotonNetwork.Instantiate(smokeEff.name, transform.position + Vector3.up, Quaternion.identity);
     }
 
     [PunRPC]

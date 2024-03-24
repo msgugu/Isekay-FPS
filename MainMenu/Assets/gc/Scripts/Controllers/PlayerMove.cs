@@ -13,7 +13,7 @@ namespace Isekai.GC
         PhotonAnimatorView PAni;
 
         //카메라 위치 잡는거
-        [SerializeField] GameObject cameraHolder;
+        public GameObject cameraHolder;
 
         private float _speedGain; // 달리기
         // 카메라 회전

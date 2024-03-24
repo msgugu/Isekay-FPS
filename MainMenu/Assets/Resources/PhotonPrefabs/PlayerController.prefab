@@ -2201,7 +2201,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.5367, y: 2.289, z: 0.1052}
-  m_LocalScale: {x: 0.14791, y: 0.2534781, z: 0.53919}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3474158625801643632}
@@ -3619,7 +3619,7 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!136 &829820513263923470
@@ -6486,7 +6486,7 @@ Transform:
   m_GameObject: {fileID: 7585637463406462775}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -1.087, z: 0}
+  m_LocalPosition: {x: -0.083, y: -1.04, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -6530,7 +6530,7 @@ MonoBehaviour:
   itemInfo: {fileID: 11400000, guid: 47afa028e37a0c2439f9629cd5228804, type: 2}
   itemGameObject: {fileID: 3008714641612574896}
   cam: {fileID: 1865736387665017854}
-  attackPoint: {fileID: 6317373156091336570}
+  attackPoint: {fileID: 7855269707616818142}
   objectToThrow: {fileID: 4711215858257944281, guid: 91a56fd5aabf62e4d9b799f6a20a3967, type: 3}
   throwCooldown: 5
   throwForce: 5

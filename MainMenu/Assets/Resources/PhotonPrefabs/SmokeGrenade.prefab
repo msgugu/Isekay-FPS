@@ -93,9 +93,10 @@ GameObject:
   m_Component:
   - component: {fileID: 6827594070120139914}
   - component: {fileID: 2763575980088437063}
+  - component: {fileID: 3653282350015924746}
   - component: {fileID: 5809988676042219923}
   - component: {fileID: 463986791304156507}
-  - component: {fileID: 833925631824516967}
+  - component: {fileID: -5856196979227330859}
   m_Layer: 0
   m_Name: SmokeGrenade
   m_TagString: Untagged
@@ -140,10 +141,27 @@ MonoBehaviour:
   Synchronization: 3
   OwnershipTransfer: 0
   observableSearch: 2
-  ObservedComponents: []
+  ObservedComponents:
+  - {fileID: 3653282350015924746}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!114 &3653282350015924746
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4711215858257944281}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 0
+  m_UseLocal: 1
 --- !u!54 &5809988676042219923
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -168,7 +186,7 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 0
 --- !u!114 &463986791304156507
@@ -183,8 +201,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0bb0c86dfc230f34dbf8abd02766eebb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!135 &833925631824516967
-SphereCollider:
+  smokeEff: {fileID: 6526933374117741907, guid: 255a7c4c7f2fe774880ddc4b34eee063, type: 3}
+--- !u!65 &-5856196979227330859
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -202,7 +221,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.05
+  m_Size: {x: 0.1, y: 0.1, z: 0.1}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &5148520483206280204
 GameObject:

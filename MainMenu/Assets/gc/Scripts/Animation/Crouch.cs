@@ -24,7 +24,7 @@ namespace Isekai.GC.Ani
             PV = controller.GetComponent<PhotonView>();
             if(PV.IsMine)
             {
-                _camera = GameObject.Find("CameraHolder");
+                _camera = controller.cameraHolder;
             }
 
             transitions = new Dictionary<State, System.Func<Animator, bool>>()
