@@ -52,7 +52,5 @@ namespace Isekai.GC.Ani
 
         }
 
-
-
     }
 }

@@ -6,12 +6,14 @@ using Photon.Realtime;
 using System.Linq;
 using System.IO;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
+using Cinemachine;
 
 public class PlayerManager : MonoBehaviour
 {
     PhotonView PV;
 
     GameObject controller;
+
 
     int Kills;
     int deaths;
@@ -34,7 +36,7 @@ public class PlayerManager : MonoBehaviour
     void CreateController()
     {
         Transform spawnpint =SpawnManager.instance.GetSpawnpoint();
-        controller =  PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerController"), 
+        controller =  PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "unitychan_dynamic"), 
                                                 spawnpint.position, spawnpint.rotation,0, new object[] {PV.ViewID});
         Debug.Log(controller.name);
     }

@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using Isekai.GC.Ani;
 using Photon.Pun;
+using Cinemachine;
 
-namespace Isekai.GC.Ani
+namespace Isekai.GC
 {
     public class PlayerMove : MonoBehaviour// IPunObservable
     {
 
         PhotonView PV;
-        PhotonAnimatorView PAni;
 
         //카메라 위치 잡는거
         public GameObject cameraHolder;
@@ -22,7 +22,8 @@ namespace Isekai.GC.Ani
         private float _verticalLookRotation;
 
         public Rigidbody rb;
-        
+        private Transform _neck;
+        private float _neckRotate;
 
         // 캐릭터 이동
         public float speed = 5f;
@@ -33,11 +34,17 @@ namespace Isekai.GC.Ani
         private float _mouseX;
 
         private Animator _animator;
+        [SerializeField] private CinemachineVirtualCamera playerCamera;
 
         // 줌 땡기는거
         private float normalFOV;
         private float zoomFOV = 40f;
         private bool isZoom;
+        private Vector3 _zoomPos = new Vector3(0.055f, -0.017f, 0.214f);
+        private Quaternion _zoomRot = Quaternion.Euler(6.28f, 0, 0);
+        private Vector3 originPos = Vector3.zero;
+        private Quaternion originRot = Quaternion.identity;
+        [SerializeField] private Camera _weaponCamera;
 
 
         private void Awake()
@@ -45,7 +52,6 @@ namespace Isekai.GC.Ani
             _animator = GetComponent<Animator>();
             rb = GetComponent<Rigidbody>();
             PV = GetComponent<PhotonView>();
-            PAni = GetComponent<PhotonAnimatorView>();
             if (!PV.IsMine)
             {
                 Destroy(GetComponentInChildren<Camera>().gameObject);
@@ -58,7 +64,8 @@ namespace Isekai.GC.Ani
             InitAnimatorBehaviour();
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
-            normalFOV = Camera.main.fieldOfView;
+            _neck = _animator.GetBoneTransform(HumanBodyBones.Neck);
+
         }
 
 
@@ -97,7 +104,7 @@ namespace Isekai.GC.Ani
             _animator.SetFloat("PosX", _horizontal);
             _animator.SetFloat("PosZ", _vertical);
 
-            
+            _neck.localRotation = Quaternion.Euler(0, 0, _neckRotate * 0.8f);
         }
 
         /// <summary>
@@ -119,9 +126,10 @@ namespace Isekai.GC.Ani
         {
             transform.Rotate(Vector3.up * Input.GetAxisRaw("Mouse X") * _mouseSensitivity);
             _verticalLookRotation += Input.GetAxisRaw("Mouse Y") * _mouseSensitivity;
-            _verticalLookRotation = Mathf.Clamp(_verticalLookRotation, -45f, 55f);
+            _verticalLookRotation = Mathf.Clamp(_verticalLookRotation, -45f, 50f);
 
             cameraHolder.transform.localEulerAngles = Vector3.left * _verticalLookRotation;
+            _neckRotate = _verticalLookRotation;
         }
 
         /// <summary>
@@ -129,20 +137,17 @@ namespace Isekai.GC.Ani
         /// </summary>
         private void Zoom()
         {
-            if (PV.IsMine)
+            if (Input.GetMouseButton(1))
             {
-                if (Input.GetMouseButton(1))
-                {
-                    isZoom = true;
-                    Camera.main.fieldOfView = Mathf.Lerp(Camera.main.fieldOfView, zoomFOV, Time.deltaTime * 5f);
-                }
-                else
-                {
-                    isZoom = false;
-                    Camera.main.fieldOfView = Mathf.Lerp(Camera.main.fieldOfView, normalFOV, Time.deltaTime * 5f);
-                }
+                _weaponCamera.transform.localPosition = Vector3.Lerp(_weaponCamera.transform.localPosition, _zoomPos, Time.deltaTime * 10);
+                _weaponCamera.transform.localRotation = Quaternion.Lerp(_weaponCamera.transform.localRotation, _zoomRot, Time.deltaTime * 10);
             }
-        }    
+            else
+            {
+                _weaponCamera.transform.localPosition = Vector3.Lerp(_weaponCamera.transform.localPosition, originPos, Time.deltaTime * 10);
+                _weaponCamera.transform.localRotation = Quaternion.Lerp(_weaponCamera.transform.localRotation, originRot, Time.deltaTime * 10);
+            }
+        }
     }
 }
 
