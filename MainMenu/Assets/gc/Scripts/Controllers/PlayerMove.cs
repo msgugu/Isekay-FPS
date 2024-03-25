@@ -4,7 +4,7 @@ using UnityEngine;
 using Isekai.GC.Ani;
 using Photon.Pun;
 
-namespace Isekai.GC
+namespace Isekai.GC.Ani
 {
     public class PlayerMove : MonoBehaviour// IPunObservable
     {
