@@ -1,13 +1,10 @@
 using UnityEngine;
+using System.Collections;
 using Photon.Pun;
 using System.IO;
 
 public class SmokeGrenade : MonoBehaviour
 {
-    public GameObject smokeEff;
-
-    private float countdown; // 폭발까지 남은 시간  
-    private bool hasExploded = false; // 폭발 여부
     GameObject smokeEffectInstance; // 생성된 폭발 효과 인스턴스
     PhotonView PV;
 
@@ -22,24 +19,35 @@ public class SmokeGrenade : MonoBehaviour
     {
         if (PV.IsMine) // 로컬 플레이어에 의해 생성된 오브젝트인지 확인
         {
-            Explode();
+            StartCoroutine(ExplodeAfterDelay(3f)); // 3초 후에 폭발 시작
         }
     }
-    void Explode()
+
+    IEnumerator ExplodeAfterDelay(float delay)
     {
-        PV.RPC("RPC_Explode", RpcTarget.All);
-        // 폭발 효과 생성
-        smokeEffectInstance = PhotonNetwork.Instantiate(smokeEff.name, transform.position + Vector3.up, Quaternion.identity);
+        yield return new WaitForSeconds(delay); // 처음 지연
+
+        // 모든 클라이언트에서 폭발 효과를 생성하고 10초 후에 파괴합니다.
+        PV.RPC("RPC_Explode", RpcTarget.All, transform.position + Vector3.up);
     }
 
     [PunRPC]
-    void RPC_Explode()
+    void RPC_Explode(Vector3 position)
     {
-        Destroy(gameObject, 5f); // 발사체 파괴
-        // 폭발 효과가 생성되고 소멸되었는지 검사
-        if (smokeEffectInstance != null && !smokeEffectInstance.activeSelf)
+        // 이펙트 생성
+        GameObject smokeEffectInstance = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "Particle System"), position, Quaternion.identity);
+
+        // 10초 후에 이펙트 파괴
+        StartCoroutine(DestroyAfter(smokeEffectInstance, 10f));
+    }
+
+    IEnumerator DestroyAfter(GameObject target, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        if (target != null)
         {
-            PhotonNetwork.Destroy(smokeEffectInstance); // 폭발 효과 인스턴스 파괴
+            PhotonNetwork.Destroy(target);
+            Destroy(gameObject);
         }
     }
 }

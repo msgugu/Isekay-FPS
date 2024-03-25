@@ -33,7 +33,6 @@ namespace Isekai.GC
         private float _mouseX;
 
         private Animator _animator;
-        public Camera playerCamera;
 
         // 줌 땡기는거
         private float normalFOV;

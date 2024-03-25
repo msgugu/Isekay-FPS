@@ -201,7 +201,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0bb0c86dfc230f34dbf8abd02766eebb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  smokeEff: {fileID: 6526933374117741907, guid: 255a7c4c7f2fe774880ddc4b34eee063, type: 3}
 --- !u!65 &-5856196979227330859
 BoxCollider:
   m_ObjectHideFlags: 0

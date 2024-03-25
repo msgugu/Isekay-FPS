@@ -38,8 +38,29 @@ public class Health : MonoBehaviour, IDamageable
 
     }
 
+    public void TakeHeal(float hp)
+    {
+        currentHealth += hp;
+
+        if (currentHealth > maxHealth) // 조건을 수정하여 체력이 maxHealth를 초과하지 않도록 함
+        {
+            currentHealth = maxHealth;
+        }
+
+        PV.RPC(nameof(RPC_TakeHeal), PV.Owner, currentHealth); // 메소드 이름을 올바르게 수정
+    }
+
+    [PunRPC]
+    void RPC_TakeHeal(float hp) // 메소드 이름을 올바르게 수정
+    {
+        currentHealth = hp;
+        Debug.Log(currentHealth);
+    }
+
     void Die()
     {
         playerManager.Die();
     }
+
+   
 }

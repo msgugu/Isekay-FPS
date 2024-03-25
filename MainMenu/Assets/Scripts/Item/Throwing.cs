@@ -13,13 +13,13 @@ public class Throwing : Grenade
 
     [Header("Settings")]
     //public int totalThrows; // 총 던질 횟수
-    public float throwCooldown; // 던지는 간격
+    public float throwCooldown = 2f; // 던지기 쿨다운 시간 설정
 
     [Header("Throwing")]
     public float throwForce; // 던질 힘
     public float throwUpwardForce; // 위로 던질 힘
 
-    bool readyToThrow; // 던지기 가능한지 여부를 나타내는 플래그
+    bool readyToThrow = true; // 던지기 가능한지 여부를 나타내는 플래그
     PhotonView PV;
     private SmokeGrenadeData _data;
     private float countdown; // 폭발까지 남은 시간  
@@ -29,18 +29,23 @@ public class Throwing : Grenade
 
     private void Awake()
     {
+
         PV = GetComponent<PhotonView>();
         _data = (SmokeGrenadeData)itemInfo;
         countdown = _data.smokeDelay; // 폭발 딜레이 초기화
     }
     public override void Use()
     {
-        PV.RPC("Throw", RpcTarget.All);
+        if (readyToThrow)
+        {
+            PV.RPC("Throw", RpcTarget.All);
+        }
     }
 
     [PunRPC]
     private void Throw()
     {
+        if (!readyToThrow) return; // 이미 던지기 진행 중이라면 반환
         readyToThrow = false; // 던지기 불가능하도록 플래그 설정
 
         // 오브젝트를 던지기 위해 새로운 오브젝트를 생성
@@ -70,12 +75,11 @@ public class Throwing : Grenade
         //totalThrows--; // 던진 횟수 감소
 
         // 던지기 쿨다운 적용
-        Invoke(nameof(ResetThrow), countdown);
+        Invoke(nameof(ResetThrow), throwCooldown);
     }
 
     private void ResetThrow()
     {
         readyToThrow = true; // 다시 던지기 가능하도록 플래그 설정
     }
-
 }

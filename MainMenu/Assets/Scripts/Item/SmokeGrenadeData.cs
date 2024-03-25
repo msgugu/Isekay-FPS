@@ -12,7 +12,7 @@ public class SmokeGrenadeData : ItemInfo
                                                                // public GameObject audioSourcePrefab;
 
     [Header("Smoke Settings")]
-    public float smokeDelay = 5f;
+    public float smokeDelay = 10f;
     
 
 }

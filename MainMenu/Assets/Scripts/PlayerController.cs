@@ -199,4 +199,9 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
     {
         playerManager.Die();
     }
+
+    public void TakeHeal(float hp)
+    {
+        throw new System.NotImplementedException();
+    }
 }
