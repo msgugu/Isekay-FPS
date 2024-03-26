@@ -1,3 +1,4 @@
+using InGame.UI;
 using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
@@ -5,16 +6,19 @@ using UnityEngine;
 
 public class Health : MonoBehaviour, IDamageable
 {
+    // UI 
+    public Test_UIProgressBar healthProgressBar;
+
     const float maxHealth = 100f;
     float currentHealth = maxHealth;
     PhotonView PV;
     PlayerManager playerManager;
 
-
     private void Awake()
     {
         PV = GetComponent<PhotonView>();
         playerManager = PhotonView.Find((int)PV.InstantiationData[0]).GetComponent<PlayerManager>();
+        UpdateHealthBar();
     }
 
     public void TakeDamage(float damage)
@@ -27,6 +31,7 @@ public class Health : MonoBehaviour, IDamageable
     {
 
         currentHealth -= damage;
+        UpdateHealthBar();
 
         //healthbarImage.fillAmount = currentHealth / maxHealth;
 
@@ -47,6 +52,7 @@ public class Health : MonoBehaviour, IDamageable
             currentHealth = maxHealth;
         }
 
+
         PV.RPC(nameof(RPC_TakeHeal), PV.Owner, currentHealth); // 메소드 이름을 올바르게 수정
     }
 
@@ -54,6 +60,7 @@ public class Health : MonoBehaviour, IDamageable
     void RPC_TakeHeal(float hp) // 메소드 이름을 올바르게 수정
     {
         currentHealth = hp;
+        UpdateHealthBar();
         Debug.Log(currentHealth);
     }
 
@@ -62,5 +69,14 @@ public class Health : MonoBehaviour, IDamageable
         playerManager.Die();
     }
 
-   
+
+    void UpdateHealthBar()
+    {
+        if (healthProgressBar != null)
+        {
+            float healthPercent = currentHealth / maxHealth;
+            healthProgressBar.SetFillAmount(healthPercent);
+        }
+    }
+
 }
