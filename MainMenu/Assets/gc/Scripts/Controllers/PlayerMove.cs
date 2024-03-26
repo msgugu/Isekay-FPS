@@ -37,9 +37,6 @@ namespace Isekai.GC
         [SerializeField] private CinemachineVirtualCamera playerCamera;
 
         // 줌 땡기는거
-        private float normalFOV;
-        private float zoomFOV = 40f;
-        private bool isZoom;
         private Vector3 _zoomPos = new Vector3(0.055f, -0.017f, 0.214f);
         private Quaternion _zoomRot = Quaternion.Euler(6.28f, 0, 0);
         private Vector3 originPos = Vector3.zero;
@@ -54,7 +51,9 @@ namespace Isekai.GC
             PV = GetComponent<PhotonView>();
             if (!PV.IsMine)
             {
+                Destroy(playerCamera);
                 Destroy(GetComponentInChildren<Camera>().gameObject);
+                Destroy(_weaponCamera);
             }
             
         }

@@ -70,6 +70,13 @@ public class Shooter : MonoBehaviourPunCallbacks
 
         itemIndex = _index;
 
+        // 카메라 웨폰 자신 무기만 랜더 하도록 예외 처리 
+        // 시이이이이발
+        if (PV.IsMine)
+        {
+            items[itemIndex].itemGameObject.layer = LayerMask.NameToLayer("Weapon");
+        }
+
         items[itemIndex].itemGameObject.SetActive(true);
 
         if (previousItemIndex != -1)

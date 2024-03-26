@@ -37,7 +37,7 @@ public class HealthPack : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         //Debug.Log("OnTriggerEnter called with: " + other.name);
-        
+        Debug.Log("씨발아!");
         if (!isRespawning && other.CompareTag("Player"))
         {
             other.gameObject.GetComponent<IDamageable>()?.TakeHeal(healthAmount);
