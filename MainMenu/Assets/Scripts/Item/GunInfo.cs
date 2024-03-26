@@ -6,4 +6,12 @@ using UnityEngine;
 public class GunInfo : ItemInfo
 {
     public float bamage;
+    public float fireRate;
+    public float nextFireTime;
+    public int bullet;
+    public float reloadTime;
+
+    //public GameObject fireEffect;
+    //public AudioClip fireAudio;
+
 }

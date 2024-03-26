@@ -12098,7 +12098,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0.00012207031}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &2759165589226460262
@@ -13499,7 +13499,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &3436480460255228542
 RectTransform:
   m_ObjectHideFlags: 0
@@ -22706,9 +22706,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: baff41d98bd66ef45999c9fb494e404a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Ammo: {fileID: 3802284617150449048}
   items:
   - {fileID: 6236786215139852209}
   - {fileID: 3639516990478912185}
+  toggleFireModeKey: 102
+  reloadKey: 114
 --- !u!114 &5994140108304910541
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25430,8 +25433,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 4879505154225196877}
   m_HandleRect: {fileID: 1259847588385768819}
   m_Direction: 2
-  m_Value: 0
-  m_Size: 0
+  m_Value: 1
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -33156,7 +33159,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1561712215073315569
 RectTransform:
   m_ObjectHideFlags: 0
@@ -36741,7 +36744,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemInfo: {fileID: 11400000, guid: 8a17743968c850749b155511c39e1811, type: 2}
   itemGameObject: {fileID: 2025620231725916770}
+  fireMode: 0
   bulletImpactPrefab: {fileID: 2000214013040110532, guid: ef9264ffe838b494b8607dcc76304d27, type: 3}
+  reloadTime: 0
+  isAuto: 0
   cam: {fileID: 5183544809088035751}
 --- !u!114 &5620568724605113297
 MonoBehaviour:
@@ -36859,7 +36865,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemInfo: {fileID: 11400000, guid: 5d1b7296c86c2e14aa8ebe625e6cb9ba, type: 2}
   itemGameObject: {fileID: 1227595445559574585}
+  fireMode: 0
   bulletImpactPrefab: {fileID: 2000214013040110532, guid: ef9264ffe838b494b8607dcc76304d27, type: 3}
+  reloadTime: 0
+  isAuto: 1
   cam: {fileID: 5183544809088035751}
 --- !u!114 &3646587300497742304
 MonoBehaviour:
