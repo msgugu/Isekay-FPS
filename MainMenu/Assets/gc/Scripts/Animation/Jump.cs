@@ -30,6 +30,7 @@ namespace Isekai.GC.Ani
 
         public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
+            _rigidbody = animator.GetComponent<Rigidbody>();
             base.OnStateEnter(animator, stateInfo, layerIndex);
             if(PV == null)
             {
@@ -47,7 +48,7 @@ namespace Isekai.GC.Ani
                 { 
                     _rigidbody = animator.GetComponent<Rigidbody>();
                 }
-                _rigidbody.AddForce(Vector3.up * _force, ForceMode.Impulse);
+                _rigidbody.velocity = Vector3.up * _force;
             }
 
         }

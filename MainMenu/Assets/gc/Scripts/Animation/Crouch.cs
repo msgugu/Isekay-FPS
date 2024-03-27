@@ -9,9 +9,10 @@ namespace Isekai.GC.Ani
     {
         private bool isCrouching = false;
         private Vector3 originalScale;
-        private float _crouchSpeed = 0.3f;
+        private float _crouchSpeed = 2f;
         PlayerMove playerMove;
-        private float _originalSpeed;
+        private float _originalSpeed; 
+        private float _originSprint;
         private GameObject _camera;
         PhotonView PV;
          
@@ -20,7 +21,8 @@ namespace Isekai.GC.Ani
         {
             base.Init(controller);
             playerMove = controller;
-            _originalSpeed = controller.speed;
+            _originalSpeed = controller.walkSpeed;
+            _originSprint = controller.sprintSpeed;
             PV = controller.GetComponent<PhotonView>();
             if(PV.IsMine)
             {
@@ -50,7 +52,7 @@ namespace Isekai.GC.Ani
                 controller.GetComponent<CapsuleCollider>().height = 0.8f;
                 controller.GetComponent<CapsuleCollider>().center = new Vector3(0, 0.4f, 0);
                 isCrouching = true;
-                controller.speed *= _crouchSpeed;
+                controller.walkSpeed = _crouchSpeed;
                 if (PV.IsMine)
                 {
                     _camera.transform.localPosition = new Vector3(0f, 0.55f, 0.3f);
@@ -71,7 +73,8 @@ namespace Isekai.GC.Ani
 
             if (controller != null)
             {
-                controller.speed = _originalSpeed;
+                controller.walkSpeed = _originalSpeed;
+                controller.sprintSpeed = _originSprint;
             }
         }
 
@@ -79,6 +82,11 @@ namespace Isekai.GC.Ani
         public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
             base.OnStateUpdate(animator, stateInfo, layerIndex);
+            if (Input.GetKey(KeyCode.LeftShift))
+            {
+                controller.sprintSpeed = 3;
+            }
+
         }
     }
 }

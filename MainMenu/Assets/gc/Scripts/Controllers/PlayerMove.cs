@@ -26,7 +26,8 @@ namespace Isekai.GC
         private float _neckRotate;
 
         // 캐릭터 이동
-        public float speed = 5f;
+        public float walkSpeed = 5f;
+        public float sprintSpeed = 10f;
         private float _horizontal;
         private float _vertical;
         Vector3 moveAmount;
@@ -81,14 +82,18 @@ namespace Isekai.GC
         private void FixedUpdate()    
         {
             if (!PV.IsMine) return;
-            _speedGain = Input.GetKey(KeyCode.LeftShift) ? 2.5f : 1;
-
-            _horizontal = Input.GetAxis("Horizontal") * _speedGain * speed;
-            _vertical = Input.GetAxis("Vertical") * _speedGain * speed;
-
-            Vector3 moveVec = new Vector3(_horizontal, 0, _vertical).normalized;
-            moveAmount = Vector3.SmoothDamp(moveAmount, moveVec * _speedGain, ref smoothMoveVelocity, _smoothTime);
-            rb.MovePosition(rb.position + transform.TransformDirection(moveAmount) * Time.fixedDeltaTime);
+            if (Input.GetKey(KeyCode.LeftShift))
+            {
+                _horizontal = Input.GetAxis("Horizontal") * sprintSpeed;
+                _vertical = Input.GetAxis("Vertical") * sprintSpeed;
+            }
+            else
+            {
+                _horizontal = Input.GetAxis("Horizontal") * walkSpeed;
+                _vertical = Input.GetAxis("Vertical") * walkSpeed;
+            }
+            Vector3 moveVec = new Vector3(_horizontal, 0, _vertical);
+            rb.MovePosition(rb.position + transform.TransformDirection(moveVec) * Time.fixedDeltaTime);
 
         }
 

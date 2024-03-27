@@ -17,3 +17,4 @@ MonoBehaviour:
   fireRate: 10
   nextFireTime: 0.1
   bullet: 30
+  reloadTime: 3

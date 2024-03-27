@@ -10,27 +10,27 @@ public class SingleShotGun : Gun
         get { return _bullet; }
         set { _bullet = value; }
     }
-
-    
-    float _reloadTime { get; set; }
-    int _bullet;
-
-    int _maxBullet;
     public float reloadTime;
     public bool isAuto;
-
     [SerializeField] Camera cam;
+
+    bool reload = false;
+    float _reloadTime;
+    int _bullet;
+    int _maxBullet;
     float _fireRate; // 건 인포에서 받아오기 초당 발사 하는 총알 갯수
     float _lastFireTime;
     PhotonView PV;
     bool _isFiring;
     GameObject fireEffect;
     AudioClip fireAudio;
+    Shooter shooter;
+
     private void Awake()
     {
         PV = GetComponent<PhotonView>();
         _fireRate = ((GunInfo)itemInfo).fireRate;
-        Bullet = ((GunInfo)itemInfo).bullet;
+        _bullet = ((GunInfo)itemInfo).bullet;
         _reloadTime = ((GunInfo)itemInfo).reloadTime;
 
         _maxBullet = _bullet;
@@ -43,6 +43,10 @@ public class SingleShotGun : Gun
 
         _lastFireTime = -1f;
     }
+    private void Start()
+    {
+        shooter = GetComponentInParent<Shooter>();
+    }
 
     public override void Use()
     {
@@ -51,16 +55,19 @@ public class SingleShotGun : Gun
             // 발사 가능한 경우에만 발사하도록 확인
             if (Time.time > _lastFireTime + 1f / _fireRate)
             {
-                if (isAuto && fireMode == FireMode.Auto && !_isFiring)
+                if(!reload)
                 {
-                    // 연발 사격 시작
-                    StartCoroutine(AutoFire());
-                }
-                else
-                {
-                    // 단발 사격 로직
-                    Shoot();
-                    _lastFireTime = Time.time; // 마지막 발사 시간 업데이트
+                    if (fireMode == FireMode.Auto && !_isFiring)
+                    {
+                        // 연발 사격 시작
+                        StartCoroutine(AutoFire());
+                    }
+                    else
+                    {
+                        // 단발 사격 로직
+                        Shoot();
+                        _lastFireTime = Time.time; // 마지막 발사 시간 업데이트
+                    }
                 }
             }
         }
@@ -71,6 +78,7 @@ public class SingleShotGun : Gun
         _isFiring = true;
         while (Input.GetMouseButton(0)) // 마우스 버튼이 눌려있는 동안
         {
+            if (_bullet == 0) break;
             Shoot();
             yield return new WaitForSeconds(1f / _fireRate); // 발사 속도에 따라 대기
         }
@@ -79,17 +87,22 @@ public class SingleShotGun : Gun
 
     public IEnumerator ReloadCoroutine()
     {
+        reload = true;
         // 리로드 시간 동안 기다립니다.
         yield return new WaitForSeconds(_reloadTime);
-
-        // 실제 총알 수를 최대치로 재설정합니다.
+        // 사운드 추가 
         _bullet = _maxBullet;
+        shooter.UpdateBullets(_bullet);
+        reload = false;
     }
 
     // 단발, 연발 
     public void ToggleFireMode()
     {
-        fireMode = fireMode == FireMode.Single ? FireMode.Auto : FireMode.Single;
+        if (isAuto)
+        {
+            fireMode = fireMode == FireMode.Single ? FireMode.Auto : FireMode.Single;
+        }
     }
 
     public void Reload()
@@ -108,6 +121,12 @@ public class SingleShotGun : Gun
             
             // 오디오 추가시 활성화
             //PV.RPC("RPC_PlayFireSound", RpcTarget.All);
+        }
+        _bullet--;
+        if (shooter != null)
+        {
+            // Shooter 스크립트에 있는 UpdateBullets 호출
+            shooter.UpdateBullets( _bullet);
         }
     }
 
