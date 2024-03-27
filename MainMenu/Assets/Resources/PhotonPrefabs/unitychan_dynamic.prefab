@@ -12023,7 +12023,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 0, y: -0.00012207031}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &2759165589226460262
@@ -14307,6 +14307,7 @@ GameObject:
   - component: {fileID: 345638595471054502}
   - component: {fileID: 7043457111547301354}
   - component: {fileID: 1101846069543911104}
+  - component: {fileID: 1162213069229143535}
   m_Layer: 9
   m_Name: Virtual Camera
   m_TagString: Untagged
@@ -14399,6 +14400,19 @@ MonoBehaviour:
   m_Damping: 0
   m_DampingWhenOccluded: 0
   m_OptimalTargetDistance: 0
+--- !u!114 &1162213069229143535
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4016716167706101873}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65410f596b753b34f978e44b739778c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  recoilIntensity: 1
 --- !u!1 &4076623980518533632
 GameObject:
   m_ObjectHideFlags: 0
@@ -36756,9 +36770,11 @@ MonoBehaviour:
   itemGameObject: {fileID: 2025620231725916770}
   fireMode: 0
   bulletImpactPrefab: {fileID: 2000214013040110532, guid: ef9264ffe838b494b8607dcc76304d27, type: 3}
-  reloadTime: 0
   isAuto: 0
   cam: {fileID: 5183544809088035751}
+  recoilAmount: 2
+  recoilRecoverySpeed: 1
+  maxRecoil: 2
 --- !u!114 &5620568724605113297
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -36873,13 +36889,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcbee5b3469a4174785ff98911e00c78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemInfo: {fileID: 11400000, guid: 8a17743968c850749b155511c39e1811, type: 2}
+  itemInfo: {fileID: 11400000, guid: 5d1b7296c86c2e14aa8ebe625e6cb9ba, type: 2}
   itemGameObject: {fileID: 1227595445559574585}
   fireMode: 0
   bulletImpactPrefab: {fileID: 2000214013040110532, guid: ef9264ffe838b494b8607dcc76304d27, type: 3}
-  reloadTime: 0
   isAuto: 1
   cam: {fileID: 5183544809088035751}
+  recoilAmount: 2
+  recoilRecoverySpeed: 1
+  maxRecoil: 2
 --- !u!114 &3646587300497742304
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -37003,9 +37021,11 @@ MonoBehaviour:
   itemGameObject: {fileID: 5039932511577896095}
   fireMode: 0
   bulletImpactPrefab: {fileID: 2000214013040110532, guid: ef9264ffe838b494b8607dcc76304d27, type: 3}
-  reloadTime: 0
   isAuto: 0
   cam: {fileID: 5183544809088035751}
+  recoilAmount: 1
+  recoilRecoverySpeed: 0.2
+  maxRecoil: 2
 --- !u!114 &5785780018178035883
 MonoBehaviour:
   m_ObjectHideFlags: 0
