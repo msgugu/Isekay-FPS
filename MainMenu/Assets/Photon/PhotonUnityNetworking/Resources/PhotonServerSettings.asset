@@ -49,6 +49,7 @@ MonoBehaviour:
   - ResetThrow
   - RPC_TackHeal
   - RPC_TakeHeal
+  - RPC_CreateKillLog
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

@@ -38,20 +38,20 @@ public class SingleShotGun : Gun
     private void Awake()
     {
         PV = GetComponent<PhotonView>();
+
         _fireRate = ((GunInfo)itemInfo).fireRate;
         _bullet = ((GunInfo)itemInfo).bullet;
         _reloadTime = ((GunInfo)itemInfo).reloadTime;
-        onRecoil += ApplyRecoil;
+        
         _maxBullet = _bullet;
-        originalCameraRotation = cam.transform.localEulerAngles;
 
-        // 오디오 불러오기
-        //fireAudio = ((GunInfo)itemInfo).firefireAudio;
+        originalCameraRotation = cam.transform.localEulerAngles;
 
         // 발사 이펙트 가져오기
         //fireEffect = ((GunInfo)itemInfo).fireEffect;
 
         _lastFireTime = -1f;
+        onRecoil += ApplyRecoil;
     }
     private void Start()
     {
@@ -74,18 +74,15 @@ public class SingleShotGun : Gun
             {
                 if (fireMode == FireMode.Auto && !_isFiring)
                 {
-                    // 연발 사격 시작
                     StartCoroutine(AutoFire());
                 }
                 else
                 {
-                    // 단발 사격 로직
                     Shoot();
                     _lastFireTime = Time.time; // 마지막 발사 시간 업데이트
                 }
             }
         }
-
     }
 
     IEnumerator AutoFire()
@@ -105,36 +102,31 @@ public class SingleShotGun : Gun
     public IEnumerator ReloadCoroutine()
     {
         reload = true;
-        // 리로드 시간 동안 기다립니다.
         yield return new WaitForSeconds(_reloadTime);
-        // 사운드 추가 
         _bullet = _maxBullet;
         shooter.UpdateBullets(_bullet);
         reload = false;
     }
 
+    // 반동 복구 로직
     IEnumerator RecoilRecovery()
     {
-        // 반동 복구 로직
         float time = 0;
         Vector3 startOffset = currentRecoilOffset;
         while (time < 1)
         {
             time += Time.deltaTime * recoilRecoverySpeed;
             currentRecoilOffset = Vector3.Lerp(startOffset, Vector3.zero, time);
-            // 매 프레임마다 카메라 회전을 업데이트합니다.
-            UpdateCameraRotation(); // 주석 해제 또는 추가
+            UpdateCameraRotation(); 
             yield return null;
         }
     }
 
-    // 단발, 연발 
+    // 사격모드 변경 
     public void ToggleFireMode()
     {
-        if (isAuto)
-        {
-            fireMode = fireMode == FireMode.Single ? FireMode.Auto : FireMode.Single;
-        }
+        // isAuto가 있는 이유는 >> 저격총 같은 총은 오토 모드가 되면 안되기 때문에 
+        if (isAuto) fireMode = fireMode == FireMode.Single ? FireMode.Auto : FireMode.Single;
     }
 
     public void Reload()
@@ -145,26 +137,19 @@ public class SingleShotGun : Gun
     void Shoot()
     {
         Ray ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f));
-        ray.origin = cam.transform.position;
+        //ray.origin = cam.transform.position;
         if(Physics.Raycast(ray, out RaycastHit hit))
         {
             hit.collider.gameObject.GetComponent<IDamageable>()?.TakeDamage(((GunInfo)itemInfo).bamage);
             PV.RPC("RPC_Shoot", RpcTarget.All, hit.point, hit.normal);
-            
-            // 오디오 추가시 활성화
-            //PV.RPC("RPC_PlayFireSound", RpcTarget.All);
         }
         _bullet--;
         if(count >= 3) 
         {
             onRecoil?.Invoke(recoilAmount, new Vector3(1, 1, 0)); // 여기서 direction.x는 무시됩니다.
         }
-        
-        if (shooter != null)
-        {
-            // Shooter 스크립트에 있는 UpdateBullets 호출
-            shooter.UpdateBullets( _bullet);
-        }
+
+        shooter?.UpdateBullets(_bullet); // Null 조건부 접근 연산자 사용
     }
 
     void ApplyRecoil(float amount, Vector3 direction)
@@ -195,14 +180,6 @@ public class SingleShotGun : Gun
     [PunRPC]
     void RPC_Shoot(Vector3 hitPosition, Vector3 hitNormal)
     {
-        // 이펙트 추가시 넣기
-        //if (fireEffect != null)
-        //{
-           // GameObject effectInstance = Instantiate(fireEffect, hitPosition + hitNormal * 0.001f, Quaternion.LookRotation(hitNormal, Vector3.forward));
-            // 필요하다면 이펙트를 정리하기 위한 로직을 추가합니다. 예: 일정 시간 후에 파괴
-           // Destroy(effectInstance, 2f);
-        //}
-
         Collider[] colliders = Physics.OverlapSphere(hitPosition, 0.3f);
         if(colliders.Length != 0)
         {
@@ -211,23 +188,4 @@ public class SingleShotGun : Gun
             bulletImpactObj.transform.SetParent(colliders[0].transform);
         }
     }
-
-    // 오디오 추가시 활성화 하셈
-    /*
-    [PunRPC]
-    void RPC_PlayFireSound()
-    {
-        // 오디오 소스 컴포넌트가 필요합니다.
-        AudioSource audioSource = this.GetComponent<AudioSource>();
-        if (!audioSource)
-        {
-            // 오디오 소스 컴포넌트가 없으면 추가합니다.
-            audioSource = this.gameObject.AddComponent<AudioSource>();
-        }
-
-        // 오디오 클립을 설정하고 재생합니다.
-        audioSource.clip = fireAudio;
-        audioSource.Play();
-    }
-    */
 }

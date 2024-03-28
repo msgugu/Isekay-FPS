@@ -37,6 +37,7 @@ public class Health : MonoBehaviour, IDamageable
 
         if (currentHealth <= 0)
         {
+            playerManager.CreateKillLog(info.Sender.NickName, PhotonNetwork.NickName);
             Die();
             PlayerManager.Find(info.Sender).GetKill();
         }

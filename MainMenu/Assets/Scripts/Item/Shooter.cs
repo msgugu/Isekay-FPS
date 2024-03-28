@@ -3,8 +3,6 @@ using Photon.Realtime;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Reflection;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
@@ -30,32 +28,22 @@ public class Shooter : MonoBehaviourPunCallbacks
     private void Awake()
     {
         PV = GetComponent<PhotonView>();
-        for (int i = 0; i< items.Length; i++)
-        {
-            items[i].itemGameObject.SetActive(true);
-        }
     }
 
     private void Start()
     {
-        for (int i = 0; i < items.Length; i++)
+        InitializeItems();
+        if (items.Length > 0)
         {
-
-            if (items[i] is SingleShotGun gun)
-            {
-                //bulletsPerGun[i] = gun.Bullet; // GunInfo에서 초기 총알 수를 가져옴
-                bulletsPerGun.Add(i, gun.Bullet);// = gun.Bullet; // GunInfo에서 초기 총알 수를 가져옴
-                items[i].itemGameObject.SetActive(false);
-            }
+            items[0].itemGameObject.SetActive(true);
+            if(PV.IsMine) items[0].itemGameObject.layer = LayerMask.NameToLayer("Weapon");
+            currentBullets = bulletsPerGun.ContainsKey(0) ? bulletsPerGun[0] : 0;
         }
-        items[0].itemGameObject.SetActive(true);
-        currentBullets = bulletsPerGun[0];
     }
 
     private void Update()
     {
         if (!PV.IsMine) return;
-        Debug.Log(currentBullets);
 
         #region 인벤토리
         if (Input.GetKeyDown(toggleFireModeKey))
@@ -132,6 +120,11 @@ public class Shooter : MonoBehaviourPunCallbacks
     {
         if (_index == previousItemIndex)
             return;
+        foreach (var item in items)
+        {
+            item.itemGameObject.SetActive(false);
+        }
+
         WeaponImage(_index);
         ChangeWeapon(_index);
         itemIndex = _index;
@@ -156,6 +149,20 @@ public class Shooter : MonoBehaviourPunCallbacks
             Hashtable hash = new Hashtable();
             hash.Add("itemIndex", itemIndex);
             PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
+        }
+    }
+
+    private void InitializeItems()
+    {
+        for (int i = 0; i < items.Length; i++)
+        {
+            items[i].itemGameObject.SetActive(true);
+
+            if (items[i] is SingleShotGun gun)
+            {
+                bulletsPerGun.Add(i, gun.Bullet); // 초기 총알 수 설정
+                items[i].itemGameObject.SetActive(false);
+            }
         }
     }
 

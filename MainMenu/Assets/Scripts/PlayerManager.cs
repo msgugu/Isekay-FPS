@@ -11,9 +11,7 @@ using Cinemachine;
 public class PlayerManager : MonoBehaviour
 {
     PhotonView PV;
-
     GameObject controller;
-
 
     int Kills;
     int deaths;
@@ -24,12 +22,9 @@ public class PlayerManager : MonoBehaviour
     }
     void Start()
     {
-        Debug.Log("플레이어 매니저 ");
-
         if (PV.IsMine)
         {
             CreateController();
-            Debug.Log("캐릭생성");
         }
     }
 
@@ -38,19 +33,14 @@ public class PlayerManager : MonoBehaviour
         Transform spawnpint =SpawnManager.instance.GetSpawnpoint();
         controller =  PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "unitychan_dynamic"), 
                                                 spawnpint.position, spawnpint.rotation,0, new object[] {PV.ViewID});
-        Debug.Log(controller.name);
     }
 
     public void Die()
     {
         PhotonNetwork.Destroy(controller);
-        CreateController();
+        controller = null;
 
-        deaths++;
-
-        Hashtable hash = new Hashtable();
-        hash.Add("deaths", deaths);
-        PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
+        StartCoroutine(Respawn());
     }
 
     public void GetKill()
@@ -66,6 +56,34 @@ public class PlayerManager : MonoBehaviour
         Hashtable hash = new Hashtable();
         hash.Add("Kills", Kills);
         PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
+    }
+
+    IEnumerator Respawn()
+    {
+        // 사망 후 일정 시간 대기
+        yield return new WaitForSeconds(3f);
+
+        // 사망 처리 및 재생성 로직
+        CreateController();
+
+        deaths++;
+        Hashtable hash = new Hashtable();
+        hash.Add("deaths", deaths);
+        PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
+    }
+  
+    public void CreateKillLog(string killerName, string victimName)
+    {
+        Debug.Log("킬로그");
+        PV.RPC("RPC_CreateKillLog", RpcTarget.All, killerName, victimName);
+    }
+
+    [PunRPC]
+    void RPC_CreateKillLog(string killerName, string victimName)
+    {
+        Debug.Log(killerName + victimName);
+        // 로컬에서 킬로그 UI 생성
+        KillLogManager.Instance.CreateKillLog(killerName, victimName);
     }
 
     public static PlayerManager Find(Player player)
