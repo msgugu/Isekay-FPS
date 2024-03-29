@@ -85,6 +85,7 @@ public class Shooter : MonoBehaviourPunCallbacks
             if (items[itemIndex] is SingleShotGun gun)
             {
                 currentBullets = gun.Bullet;
+
             }
                 if (currentBullets == 0)
             {
@@ -92,6 +93,8 @@ public class Shooter : MonoBehaviourPunCallbacks
             }
 
             items[itemIndex].Use();
+
+
             Ammo.text = currentBullets.ToString();
         }
         #endregion

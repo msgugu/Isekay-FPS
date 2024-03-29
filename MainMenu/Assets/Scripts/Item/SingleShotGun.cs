@@ -44,7 +44,6 @@ public class SingleShotGun : Gun
     private void Awake()
     {
         PV = GetComponent<PhotonView>();
-
         _fireRate = ((GunInfo)itemInfo).fireRate;
         _bullet = ((GunInfo)itemInfo).bullet;
         _reloadTime = ((GunInfo)itemInfo).reloadTime;
@@ -158,6 +157,7 @@ public class SingleShotGun : Gun
     void Shoot()
     {
         Ray ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f));
+        
         //ray.origin = cam.transform.position;
         if(Physics.Raycast(ray, out RaycastHit hit))
         {
@@ -172,6 +172,7 @@ public class SingleShotGun : Gun
 
         shooter?.UpdateBullets(_bullet); // Null 조건부 접근 연산자 사용
         crosshair.OnShoot();
+        
     }
 
     void ApplyRecoil(float amount, Vector3 direction)
@@ -210,4 +211,6 @@ public class SingleShotGun : Gun
             bulletImpactObj.transform.SetParent(colliders[0].transform);
         }
     }
+
+    
 }

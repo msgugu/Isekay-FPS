@@ -38,8 +38,8 @@ namespace Isekai.GC
         [SerializeField] private CinemachineVirtualCamera playerCamera;
 
         // 줌 땡기는거
-        private Vector3 _zoomPos = new Vector3(0.055f, -0.017f, 0.214f);
-        private Quaternion _zoomRot = Quaternion.Euler(6.28f, 0, 0);
+        private Vector3 _zoomPos = new Vector3(0.0549999774f, -0.00999999978f, 0.100000001f);
+        private Quaternion _zoomRot = Quaternion.Euler(3.11f, 0, 0);
         private Vector3 originPos = Vector3.zero;
         private Quaternion originRot = Quaternion.identity;
         [SerializeField] private Camera _weaponCamera;
@@ -152,6 +152,8 @@ namespace Isekai.GC
                 _weaponCamera.transform.localRotation = Quaternion.Lerp(_weaponCamera.transform.localRotation, originRot, Time.deltaTime * 10);
             }
         }
+
+        
     }
 }
 
