@@ -13,10 +13,7 @@ public class GunShake : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetMouseButton(0)) // 마우스 버튼을 누르는 순간에만 발사 이벤트 발생
-        {
-            Fire();
-        }
+        
     }
 
     // 총 발사시 호출되는 함수

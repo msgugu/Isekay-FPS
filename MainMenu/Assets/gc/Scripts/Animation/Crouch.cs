@@ -39,7 +39,7 @@ namespace Isekai.GC.Ani
                 { State.Idle, (animator) =>
                 {
 
-                    return Input.GetKeyDown(KeyCode.V) &&
+                    return Input.GetKeyDown(KeyCode.C) &&
                     animator.IsGround();
                 }},
             };

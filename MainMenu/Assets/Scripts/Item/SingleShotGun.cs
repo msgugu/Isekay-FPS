@@ -40,6 +40,7 @@ public class SingleShotGun : Gun
     GameObject fireEffect;
     AudioClip fireAudio;
     Shooter shooter;
+    GunShake gunShake;
 
     private void Awake()
     {
@@ -60,6 +61,7 @@ public class SingleShotGun : Gun
     }
     private void Start()
     {
+        gunShake = GetComponent<GunShake>();
         shooter = GetComponentInParent<Shooter>();
     }
 
@@ -157,9 +159,10 @@ public class SingleShotGun : Gun
     void Shoot()
     {
         Ray ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f));
-        
+        gunShake.Fire();
+
         //ray.origin = cam.transform.position;
-        if(Physics.Raycast(ray, out RaycastHit hit))
+        if (Physics.Raycast(ray, out RaycastHit hit))
         {
             hit.collider.gameObject.GetComponent<IDamageable>()?.TakeDamage(((GunInfo)itemInfo).bamage);
             PV.RPC("RPC_Shoot", RpcTarget.All, hit.point, hit.normal);
