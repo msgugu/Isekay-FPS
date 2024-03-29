@@ -2,12 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using UnityEngine.UI;
+using Unity.VisualScripting;
 
 public class SingleShotGun : Gun
 {
     public delegate void RecoilDelegate(float amount, Vector3 direction); // 반동 처리를 위한 대리자 선언
 
     public event RecoilDelegate onRecoil; // 이벤트 선언
+    public Crosshair crosshair;
     public int Bullet
     {
         get { return _bullet; }
@@ -18,14 +21,17 @@ public class SingleShotGun : Gun
     [SerializeField] private float recoilAmount = 2.0f; // 반동의 강도
     [SerializeField] private float recoilRecoverySpeed = 1f; // 반동 회복 속도
     [SerializeField] private float maxRecoil = 5f; // 최대 반동 크기
+    [SerializeField] private Image _reloadImage;
 
     private Vector3 originalCameraRotation; // 카메라의 원래 회전값 저장
     private Vector3 currentRecoilOffset = Vector3.zero; // 현재 반동에 의한 회전값 오프셋
 
     bool reload = false;                                                // 재장전 중 일때는 총 발사 안되도록 
     float _reloadTime;                                                  // 건 info에서 받아올 변수
-    int _bullet;                                                        // 건 info에서 받아올 기본 총알 갯수
+    float _reloading;
+
     int count;
+    int _bullet;                                                        // 건 info에서 받아올 기본 총알 갯수
     int _maxBullet;                                                     // 맥스 총알 설정
     float _fireRate;                                                    // 건 인포에서 받아오기 초당 발사 하는 총알 갯수
     float _lastFireTime;                                                //
@@ -101,8 +107,23 @@ public class SingleShotGun : Gun
 
     public IEnumerator ReloadCoroutine()
     {
+        if (_maxBullet == _bullet) yield break;
         reload = true;
-        yield return new WaitForSeconds(_reloadTime);
+        _reloading = _reloadTime;
+        _reloadImage.gameObject.SetActive(true);
+        while (_reloading > 0)
+        {
+            // 경과된 시간만큼 _reloading을 감소시킵니다.
+            _reloading -= Time.deltaTime;
+
+            // fillAmount를 업데이트하여 UI를 업데이트합니다.
+            _reloadImage.fillAmount = _reloading / _reloadTime;
+
+            // 다음 프레임까지 기다립니다.
+            yield return null;
+        }
+
+        _reloadImage.gameObject.SetActive(false);
         _bullet = _maxBullet;
         shooter.UpdateBullets(_bullet);
         reload = false;
@@ -150,6 +171,7 @@ public class SingleShotGun : Gun
         }
 
         shooter?.UpdateBullets(_bullet); // Null 조건부 접근 연산자 사용
+        crosshair.OnShoot();
     }
 
     void ApplyRecoil(float amount, Vector3 direction)
