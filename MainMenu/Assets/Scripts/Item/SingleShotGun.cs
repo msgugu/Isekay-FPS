@@ -3,13 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using UnityEngine.UI;
+using Cinemachine;
 using Unity.VisualScripting;
 
 public class SingleShotGun : Gun
 {
-    public delegate void RecoilDelegate(float amount, Vector3 direction); // 반동 처리를 위한 대리자 선언
-
-    public event RecoilDelegate onRecoil; // 이벤트 선언
     public Crosshair crosshair;
     public int Bullet
     {
@@ -18,7 +16,7 @@ public class SingleShotGun : Gun
     }
     public bool isAuto;
     [SerializeField] Camera cam;
-    [SerializeField] private float recoilAmount = 2.0f; // 반동의 강도
+    [SerializeField] private CinemachineVirtualCamera virtualCam;
     [SerializeField] private float recoilRecoverySpeed = 1f; // 반동 회복 속도
     [SerializeField] private float maxRecoil = 5f; // 최대 반동 크기
     [SerializeField] private Image _reloadImage;
@@ -37,8 +35,6 @@ public class SingleShotGun : Gun
     float _lastFireTime;                                                //
     PhotonView PV;                                                      // 자기 자신 찾기 위한 포톤뷰
     bool _isFiring;                                                     //
-    GameObject fireEffect;
-    AudioClip fireAudio;
     Shooter shooter;
     GunShake gunShake;
 
@@ -48,26 +44,25 @@ public class SingleShotGun : Gun
         _fireRate = ((GunInfo)itemInfo).fireRate;
         _bullet = ((GunInfo)itemInfo).bullet;
         _reloadTime = ((GunInfo)itemInfo).reloadTime;
-        
         _maxBullet = _bullet;
 
         originalCameraRotation = cam.transform.localEulerAngles;
 
-        // 발사 이펙트 가져오기
-        //fireEffect = ((GunInfo)itemInfo).fireEffect;
-
         _lastFireTime = -1f;
-        onRecoil += ApplyRecoil;
     }
     private void Start()
     {
+        if (virtualCam == null)
+        {
+            virtualCam = FindObjectOfType<CinemachineVirtualCamera>();
+        }
         gunShake = GetComponent<GunShake>();
         shooter = GetComponentInParent<Shooter>();
     }
 
     private void OnDestroy()
     {
-        onRecoil -= ApplyRecoil; // 올바른 이벤트에서 메서드 연결 해제 방법
+        //onRecoil -= ApplyRecoil; // 올바른 이벤트에서 메서드 연결 해제 방법
     }
 
     public override void Use()
@@ -102,6 +97,7 @@ public class SingleShotGun : Gun
             Shoot();
             yield return new WaitForSeconds(1f / _fireRate); // 발사 속도에 따라 대기
         }
+        StartCoroutine(ResetRecoil(virtualCam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>()));
         _isFiring = false;
         count = 0;
     }
@@ -123,25 +119,10 @@ public class SingleShotGun : Gun
             // 다음 프레임까지 기다립니다.
             yield return null;
         }
-
         _reloadImage.gameObject.SetActive(false);
         _bullet = _maxBullet;
         shooter.UpdateBullets(_bullet);
         reload = false;
-    }
-
-    // 반동 복구 로직
-    IEnumerator RecoilRecovery()
-    {
-        float time = 0;
-        Vector3 startOffset = currentRecoilOffset;
-        while (time < 1)
-        {
-            time += Time.deltaTime * recoilRecoverySpeed;
-            currentRecoilOffset = Vector3.Lerp(startOffset, Vector3.zero, time);
-            UpdateCameraRotation(); 
-            yield return null;
-        }
     }
 
     // 사격모드 변경 
@@ -168,52 +149,76 @@ public class SingleShotGun : Gun
             PV.RPC("RPC_Shoot", RpcTarget.All, hit.point, hit.normal);
         }
         _bullet--;
-        if(count >= 3) 
+        if (count < 3)
         {
-            onRecoil?.Invoke(recoilAmount, new Vector3(1, 1, 0)); // 여기서 direction.x는 무시됩니다.
+            StartCoroutine(ApplyRecoil());
         }
-
+        count++;
         shooter?.UpdateBullets(_bullet); // Null 조건부 접근 연산자 사용
         crosshair.OnShoot();
-        
+
     }
 
-    void ApplyRecoil(float amount, Vector3 direction)
+    IEnumerator ApplyRecoil()
     {
-        // 반동 방향과 크기를 계산
-        Vector3 recoilToAdd = new Vector3(-amount * direction.y, Random.Range(-amount, amount) * direction.x, 0);
+        var noise = virtualCam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+        if (noise != null)
+        {
+            float applyTime = 0f;
+            // 초기 반동 강도와 빈도 값을 저장합니다.
+            float initialAmplitude = noise.m_AmplitudeGain;
+            float initialFrequency = noise.m_FrequencyGain;
 
-        // 예상 반동을 현재 반동에 더함
-        Vector3 newRecoilOffset = currentRecoilOffset + recoilToAdd;
+            // 반동이 적용되는 동안 반복합니다.
+            while (applyTime < recoilRecoverySpeed)
+            {
+                // 반동 강도와 빈도를 점진적으로 증가시킵니다.
+                noise.m_AmplitudeGain = Mathf.Lerp(initialAmplitude, maxRecoil, applyTime / recoilRecoverySpeed);
+                noise.m_FrequencyGain = Mathf.Lerp(initialFrequency, maxRecoil, applyTime / recoilRecoverySpeed);
 
-        // 예상 반동이 최대 반동을 초과하는지 확인
-        newRecoilOffset.x = Mathf.Clamp(newRecoilOffset.x, -maxRecoil, maxRecoil);
-        newRecoilOffset.y = Mathf.Clamp(newRecoilOffset.y, -maxRecoil, maxRecoil);
+                // 시간을 증가시킵니다.
+                applyTime += Time.deltaTime;
 
-        // 최대 반동을 고려하여 반동 오프셋 업데이트
-        currentRecoilOffset = newRecoilOffset;
+                // 다음 프레임까지 기다립니다.
+                yield return null;
+            }
 
-        // 반동 복구 시작
-        StartCoroutine(RecoilRecovery());
+            // 반동 적용 후 바로 반동 복구를 시작합니다.
+        }
     }
 
-    void UpdateCameraRotation()
+    IEnumerator ResetRecoil(Cinemachine.CinemachineBasicMultiChannelPerlin noise)
     {
-        // 카메라의 원래 회전에 현재 반동 오프셋을 반영하여 회전을 업데이트합니다.
-        cam.transform.localEulerAngles = originalCameraRotation + currentRecoilOffset;
+        float startingAmplitude = noise.m_AmplitudeGain;
+        float startingFrequency = noise.m_FrequencyGain;
+        float elapsedTime = 0;
+
+        while (elapsedTime < recoilRecoverySpeed)
+        {
+            // 시간에 따라 lerp를 사용하여 AmplitudeGain을 줄입니다.
+            noise.m_AmplitudeGain = Mathf.Lerp(startingAmplitude, 0f, elapsedTime / recoilRecoverySpeed);
+            noise.m_FrequencyGain = Mathf.Lerp(startingFrequency, 0f, elapsedTime / recoilRecoverySpeed);
+
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        // 반동 효과를 제거합니다.
+        noise.m_AmplitudeGain = 0f;
+        noise.m_FrequencyGain = 0f;
     }
 
     [PunRPC]
     void RPC_Shoot(Vector3 hitPosition, Vector3 hitNormal)
     {
         Collider[] colliders = Physics.OverlapSphere(hitPosition, 0.3f);
-        if(colliders.Length != 0)
+        if (colliders.Length != 0)
         {
-            GameObject bulletImpactObj = Instantiate(bulletImpactPrefab,hitPosition + hitNormal *0.001f,Quaternion.LookRotation(hitNormal,Vector3.up) * bulletImpactPrefab.transform.rotation);
+            GameObject bulletImpactObj = Instantiate(bulletImpactPrefab, hitPosition + hitNormal * 0.001f, Quaternion.LookRotation(hitNormal, Vector3.up) * bulletImpactPrefab.transform.rotation);
             Destroy(bulletImpactObj, 10f);
             bulletImpactObj.transform.SetParent(colliders[0].transform);
         }
     }
 
-    
+
 }

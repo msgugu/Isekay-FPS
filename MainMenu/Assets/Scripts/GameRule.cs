@@ -142,7 +142,6 @@ public class GameRule : MonoBehaviourPunCallbacks
                 Debug.Log(player.NickName + ": " + kills + " 킬");
             }
         }
-
         Debug.Log("게임이 종료되었습니다.");
         PhotonNetwork.CurrentRoom.IsOpen = true; // 게임이 종료되면 방을 다시 열어 새 게임을 준비합니다.
 
