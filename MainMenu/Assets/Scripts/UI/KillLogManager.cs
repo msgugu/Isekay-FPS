@@ -28,6 +28,7 @@ public class KillLogManager : MonoBehaviour
     {
         foreach (Player player in PhotonNetwork.PlayerList)
         {
+            Debug.Log("생성안하냐?1");
             GameObject log = Instantiate(killLogPrefab, logContainer);
             TMP_Text[] texts = log.GetComponentsInChildren<TMP_Text>();
             if (texts.Length >= 2)
@@ -35,6 +36,7 @@ public class KillLogManager : MonoBehaviour
                 texts[0].text = killer; // 첫 번째 Text 컴포넌트에 killer 이름 설정
                 texts[1].text = victim; // 두 번째 Text 컴포넌트에 victim 이름 설정
             }
+            log.SetActive(true);
             Destroy(log, 5f);
         }
         // 예: log.GetComponent<KillLogUI>().Setup(killer, victim);

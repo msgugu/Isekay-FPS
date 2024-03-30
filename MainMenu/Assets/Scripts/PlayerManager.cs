@@ -6,12 +6,12 @@ using Photon.Realtime;
 using System.Linq;
 using System.IO;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
-using Cinemachine;
 
 public class PlayerManager : MonoBehaviour
 {
     PhotonView PV;
     GameObject controller;
+    GameRule gameRule;
 
     int Kills;
     int deaths;
@@ -19,6 +19,7 @@ public class PlayerManager : MonoBehaviour
     private void Awake()
     {
         PV = GetComponent<PhotonView>();
+        gameRule = FindObjectOfType<GameRule>();
     }
     void Start()
     {
@@ -60,16 +61,14 @@ public class PlayerManager : MonoBehaviour
 
     IEnumerator Respawn()
     {
-        // 사망 후 일정 시간 대기
-        yield return new WaitForSeconds(3f);
-
-        // 사망 처리 및 재생성 로직
-        CreateController();
-
         deaths++;
         Hashtable hash = new Hashtable();
         hash.Add("deaths", deaths);
         PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
+
+        // 사망 후 일정 시간 대기
+        yield return new WaitForSeconds(3f);
+        if (!gameRule.GameEnded) CreateController();
     }
   
     public void CreateKillLog(string killerName, string victimName)
@@ -84,6 +83,10 @@ public class PlayerManager : MonoBehaviour
         Debug.Log(killerName + victimName);
         // 로컬에서 킬로그 UI 생성
         KillLogManager.Instance.CreateKillLog(killerName, victimName);
+    }
+    public void ResetKills()
+    {
+        Kills = 0;
     }
 
     public static PlayerManager Find(Player player)
