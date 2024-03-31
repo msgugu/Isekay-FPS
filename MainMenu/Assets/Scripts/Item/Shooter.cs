@@ -87,7 +87,7 @@ public class Shooter : MonoBehaviourPunCallbacks
                 currentBullets = gun.Bullet;
 
             }
-                if (currentBullets == 0)
+            if (currentBullets == 0)
             {
                 return;       
             }
@@ -184,7 +184,6 @@ public class Shooter : MonoBehaviourPunCallbacks
     #region 총알 
     void ChangeWeapon(int _index)
     {
-        Debug.Log("무기 바꾸기?");
         if (items[_index] is SingleShotGun gun)
         {
 

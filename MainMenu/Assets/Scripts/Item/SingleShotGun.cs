@@ -149,7 +149,7 @@ public class SingleShotGun : Gun
             PV.RPC("RPC_Shoot", RpcTarget.All, hit.point, hit.normal);
         }
         _bullet--;
-        if (count < 3)
+        if (count < 3 && isAuto)
         {
             StartCoroutine(ApplyRecoil());
         }
@@ -219,6 +219,4 @@ public class SingleShotGun : Gun
             bulletImpactObj.transform.SetParent(colliders[0].transform);
         }
     }
-
-
 }

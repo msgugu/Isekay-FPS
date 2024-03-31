@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f287ed3c8a65d144a879379301be44e0, type: 3}
   m_Name: Rifle
   m_EditorClassIdentifier: 
-  itemName: Pistol
-  bamage: 12
+  itemName: Rifle
+  bamage: 18
   fireRate: 10
   nextFireTime: 0.1
   bullet: 30

@@ -97,7 +97,7 @@ GameObject:
   - component: {fileID: 5809988676042219923}
   - component: {fileID: 463986791304156507}
   - component: {fileID: -5856196979227330859}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: SmokeGrenade
   m_TagString: Untagged
   m_Icon: {fileID: 0}

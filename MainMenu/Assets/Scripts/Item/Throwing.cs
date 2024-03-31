@@ -31,12 +31,15 @@ public class Throwing : Grenade
     {
 
         PV = GetComponent<PhotonView>();
-        _data = (SmokeGrenadeData)itemInfo;
+        if (itemInfo is SmokeGrenadeData)
+        {
+            _data = (SmokeGrenadeData)itemInfo;
+        }
         countdown = _data.smokeDelay; // 폭발 딜레이 초기화
     }
     public override void Use()
     {
-        if (readyToThrow)
+        if (readyToThrow && PV.IsMine)
         {
             PV.RPC("Throw", RpcTarget.All);
         }
@@ -45,6 +48,7 @@ public class Throwing : Grenade
     [PunRPC]
     private void Throw()
     {
+        if (!PV.IsMine) return;
         if (!readyToThrow) return; // 이미 던지기 진행 중이라면 반환
         readyToThrow = false; // 던지기 불가능하도록 플래그 설정
 
@@ -52,6 +56,8 @@ public class Throwing : Grenade
         GameObject projectile = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "SmokeGrenade"),
                                 attackPoint.position, cam.rotation, 0, new object[] { PV.ViewID });
 
+        Debug.Log("Projectile instantiated at position: " + projectile.transform.position);
+        Debug.Log(attackPoint.transform.position);  
         // 던질 오브젝트의 Rigidbody 컴포넌트 가져오기
         Rigidbody projectileRb = projectile.GetComponent<Rigidbody>();
 
