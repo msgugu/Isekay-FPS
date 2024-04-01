@@ -17,4 +17,4 @@ MonoBehaviour:
   fireRate: 2
   nextFireTime: 2
   bullet: 5
-  reloadTime: 3
+  reloadTime: 4
