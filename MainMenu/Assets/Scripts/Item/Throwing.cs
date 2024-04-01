@@ -1,4 +1,4 @@
-using Photon.Pun;
+ using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -25,11 +25,13 @@ public class Throwing : Grenade
     private float countdown; // 폭발까지 남은 시간  
     //private bool hasExploded = false; // 폭발 여부
     private GameObject smokeEffectInstance; // 생성된 폭발 효과 인스턴스
-
+    Animator _ani; // 애니메이션
+    PhotonAnimatorView PAV;
 
     private void Awake()
     {
-
+        PAV = GetComponentInParent<PhotonAnimatorView>();
+        _ani = GetComponentInParent<Animator>();
         PV = GetComponent<PhotonView>();
         if (itemInfo is SmokeGrenadeData)
         {
@@ -42,24 +44,31 @@ public class Throwing : Grenade
         if (readyToThrow && PV.IsMine)
         {
             PV.RPC("Throw", RpcTarget.All);
+
         }
     }
 
     [PunRPC]
-    private void Throw()
+    private IEnumerator Throw()
     {
-        if (!PV.IsMine) return;
-        if (!readyToThrow) return; // 이미 던지기 진행 중이라면 반환
+        _ani.SetTrigger("IsThrow");
+
+        yield return new WaitForSeconds(1f);
+
+        if (!PV.IsMine) yield break;
+        if (!readyToThrow) yield break; // 이미 던지기 진행 중이라면 반환
         readyToThrow = false; // 던지기 불가능하도록 플래그 설정
 
+        
         // 오브젝트를 던지기 위해 새로운 오브젝트를 생성
         GameObject projectile = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "SmokeGrenade"),
-                                attackPoint.position, cam.rotation, 0, new object[] { PV.ViewID });
+        attackPoint.position, cam.rotation, 0, new object[] { PV.ViewID });
 
         Debug.Log("Projectile instantiated at position: " + projectile.transform.position);
-        Debug.Log(attackPoint.transform.position);  
+        Debug.Log(attackPoint.transform.position);
         // 던질 오브젝트의 Rigidbody 컴포넌트 가져오기
         Rigidbody projectileRb = projectile.GetComponent<Rigidbody>();
+
 
         // 던질 방향 계산
         Vector3 forceDirection = cam.transform.forward;
@@ -77,15 +86,17 @@ public class Throwing : Grenade
 
         // 힘을 추가하여 던짐
         projectileRb.AddForce(forceToAdd, ForceMode.Impulse);
-
         //totalThrows--; // 던진 횟수 감소
+
 
         // 던지기 쿨다운 적용
         Invoke(nameof(ResetThrow), throwCooldown);
+        
     }
 
     private void ResetThrow()
     {
         readyToThrow = true; // 다시 던지기 가능하도록 플래그 설정
+        
     }
 }
