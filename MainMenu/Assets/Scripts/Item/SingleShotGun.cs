@@ -9,6 +9,7 @@ using Unity.VisualScripting;
 public class SingleShotGun : Gun
 {
     public Crosshair crosshair;
+    public string weaponType;
     public int Bullet
     {
         get { return _bullet; }
@@ -37,6 +38,7 @@ public class SingleShotGun : Gun
     bool _isFiring;                                                     //
     Shooter shooter;
     GunShake gunShake;
+    AudioSource audioSource;
 
     private void Awake()
     {
@@ -49,6 +51,12 @@ public class SingleShotGun : Gun
         originalCameraRotation = cam.transform.localEulerAngles;
 
         _lastFireTime = -1f;
+
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            audioSource = gameObject.GetComponent<AudioSource>();
+        }
     }
     private void Start()
     {
@@ -78,6 +86,7 @@ public class SingleShotGun : Gun
                 {
                     StartCoroutine(AutoFire());
                 }
+
                 else
                 {
                     Shoot();
@@ -106,8 +115,12 @@ public class SingleShotGun : Gun
     {
         if (_maxBullet == _bullet) yield break;
         reload = true;
+
+        SoundManager.instance.PlayReloadSound(transform.position);
+
         _reloading = _reloadTime;
         _reloadImage.gameObject.SetActive(true);
+
         while (_reloading > 0)
         {
             // 경과된 시간만큼 _reloading을 감소시킵니다.
@@ -119,8 +132,8 @@ public class SingleShotGun : Gun
             // 다음 프레임까지 기다립니다.
             yield return null;
         }
-        _reloadImage.gameObject.SetActive(false);
         _bullet = _maxBullet;
+        _reloadImage.gameObject.SetActive(false);
         shooter.UpdateBullets(_bullet);
         reload = false;
     }
@@ -130,6 +143,9 @@ public class SingleShotGun : Gun
     {
         // isAuto가 있는 이유는 >> 저격총 같은 총은 오토 모드가 되면 안되기 때문에 
         if (isAuto) fireMode = fireMode == FireMode.Single ? FireMode.Auto : FireMode.Single;
+
+        // 사격 모드 변경 사운드
+        SoundManager.instance.PlayFireModeChangeSound(transform.position);
     }
 
     public void Reload()
@@ -141,19 +157,46 @@ public class SingleShotGun : Gun
     {
         Ray ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f));
         gunShake.Fire();
-
         //ray.origin = cam.transform.position;
-        if (Physics.Raycast(ray, out RaycastHit hit))
+
+        // 탄약이 있는지 체크
+        if (_bullet > 0)
         {
-            hit.collider.gameObject.GetComponent<IDamageable>()?.TakeDamage(((GunInfo)itemInfo).bamage);
-            PV.RPC("RPC_Shoot", RpcTarget.All, hit.point, hit.normal);
+            if (Physics.Raycast(ray, out RaycastHit hit))
+            {
+                hit.collider.gameObject.GetComponent<IDamageable>()?.TakeDamage(((GunInfo)itemInfo).bamage);
+                PV.RPC("RPC_Shoot", RpcTarget.All, hit.point, hit.normal, hit.collider.gameObject.layer);
+            }
+
+            if (count < 3 && isAuto)
+            {
+                StartCoroutine(ApplyRecoil());
+            }
+            count++;
+
+            if (PV.IsMine)
+            {
+                BulletMuzzleEffect.gameObject.layer = LayerMask.NameToLayer("Weapon");
+                BulletMuzzleEffect.Play();
+            }
+
+            _bullet--; // 탄약 감소
+
+            // 남은 탄약이 더 이상 없음
+            if (_bullet == 0)
+            {
+                // 탄창이 빈 소리가 나옴 (팅)
+                SoundManager.instance.PlayEmptyMagazineSound(transform.position);
+            }
         }
-        _bullet--;
-        if (count < 3 && isAuto)
+
+        else if(_bullet <= 0)
         {
-            StartCoroutine(ApplyRecoil());
+            // 탄약이 남아 있지 않은데 계속 쏘려고 하면 틱틱 거리는 소리 재생
+            SoundManager.instance.PlayNoAmmoSound(transform.position);
         }
-        count++;
+
+        PV.RPC("RPC_PlayerShootSound", RpcTarget.All, weaponType); // 무기 타입에 따라 소리 재생
         shooter?.UpdateBullets(_bullet); // Null 조건부 접근 연산자 사용
         crosshair.OnShoot();
 
@@ -209,14 +252,41 @@ public class SingleShotGun : Gun
     }
 
     [PunRPC]
-    void RPC_Shoot(Vector3 hitPosition, Vector3 hitNormal)
+    void RPC_Shoot(Vector3 hitPosition, Vector3 hitNormal, int hitLayer)
     {
-        Collider[] colliders = Physics.OverlapSphere(hitPosition, 0.3f);
-        if (colliders.Length != 0)
+        // 총구 화염 재생
+        BulletMuzzleEffect.Play();
+
+        // 탄흔 생성
+        GameObject bulletImpact = bulletImpactPrefab;
+
+        // 레이어에 설정 되어 있는 숫자를 비교해서 탄흔 생성
+        switch (hitLayer)
         {
-            GameObject bulletImpactObj = Instantiate(bulletImpactPrefab, hitPosition + hitNormal * 0.001f, Quaternion.LookRotation(hitNormal, Vector3.up) * bulletImpactPrefab.transform.rotation);
-            Destroy(bulletImpactObj, 10f);
-            bulletImpactObj.transform.SetParent(colliders[0].transform);
+            case int layer when layer == LayerMask.NameToLayer("Player"):
+                bulletImpact = bulletImpactFlesh;
+                break;
+            case int layer when layer == LayerMask.NameToLayer("Ground"):
+                bulletImpact = bulletImpactPrefab;
+                break;
+            case int layer when layer == LayerMask.NameToLayer("Default"):
+                bulletImpact = bulletImpactPrefab;
+                break;
         }
+
+        // 탄흔 프리팹 생성 위치
+        GameObject bulletImpactObj = Instantiate(bulletImpact, hitPosition + hitNormal * 0.001f, Quaternion.LookRotation(hitNormal, Vector3.up) * bulletImpact.transform.rotation);
+        Destroy(bulletImpactObj, 2f); // 생성된 탄흔 일정 시간이 지난 후 삭제
+    }
+
+    /// <summary>
+    /// 플레이어가 총을 쏘면 재생 되는 사운드 (멀티, 다른 사람도 들을 수 있음)
+    /// </summary>
+    /// <param name="weaponType"> 무기의 타입 </param>
+    [PunRPC]
+    public void RPC_PlayerShootSound(string weaponType)
+    {
+        // transform.position 거리 별 사운드 감소를 위해 게임 오브젝트의 위치에서 생성
+        SoundManager.instance.PlayRandomSound(weaponType, transform.position);
     }
 }

@@ -19192,6 +19192,81 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4000012097295612, guid: 4944c29dadd7e02468c053eafe48e485, type: 3}
   m_PrefabInstance: {fileID: 1525832211}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1528615001
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1528615003}
+  - component: {fileID: 1528615002}
+  m_Layer: 0
+  m_Name: SoundManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1528615002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1528615001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e126d837cf97bb42bf8aed6334667f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  reloadSound: {fileID: 8300000, guid: ece4b81a1b1ff7c46a7b603c9eb244c1, type: 3}
+  fireModeChangeSound: {fileID: 8300000, guid: 3853be0b6a243ce4bb7f66c716892ccc, type: 3}
+  emptyMagazineSounds:
+  - {fileID: 8300000, guid: 0fbbe1d48b6e0d94b95335f658b5b1b8, type: 3}
+  - {fileID: 8300000, guid: 31c576b988020e54884db7aded00d71f, type: 3}
+  - {fileID: 8300000, guid: 5cf09d4e6176384439119cb618be62c0, type: 3}
+  - {fileID: 8300000, guid: 961035c4d43f24b43b58eb42a3978864, type: 3}
+  - {fileID: 8300000, guid: b0cd221ee97f21e499fb5f8bcd54f7e3, type: 3}
+  - {fileID: 8300000, guid: d8914d25b17383f4abb50e1105462da5, type: 3}
+  - {fileID: 8300000, guid: 1a8a48d1eca523c4486f8c10b1672477, type: 3}
+  - {fileID: 8300000, guid: 86229bbf7a9c75c4f83f38f687df6ec3, type: 3}
+  noAmmoSounds:
+  - {fileID: 8300000, guid: f6789a5fbf66f6e439d98f874d8845cf, type: 3}
+  - {fileID: 8300000, guid: b71d0b7fa71e8024292b9ab99fdcfcd2, type: 3}
+  - {fileID: 8300000, guid: f3d70dc37c82761449db3424b9ec93d6, type: 3}
+  - {fileID: 8300000, guid: 5201db70d87208f49abdcdda3a20182f, type: 3}
+  - {fileID: 8300000, guid: f4a18e2d91506134b84ffab1c0748069, type: 3}
+  - {fileID: 8300000, guid: 45658bf0e5da811448c0e147a82df1cb, type: 3}
+  gunSoundArray:
+  - gunType: Assault Rifle
+    clips:
+    - {fileID: 8300000, guid: 4d69ba631e56310409a2b687b277d522, type: 3}
+    - {fileID: 8300000, guid: d8f9c66ff0de8664bafbd804d5474071, type: 3}
+    - {fileID: 8300000, guid: a7f7eccb64fe5e147b695e6803d3ee89, type: 3}
+  - gunType: Sniper Rifle
+    clips:
+    - {fileID: 8300000, guid: 6be362a943bbc234c9d41b1e7f3e6226, type: 3}
+    - {fileID: 8300000, guid: c39c00b6b03bd2141ab0f5feaf3ce118, type: 3}
+    - {fileID: 8300000, guid: 523c2956446b93b4786a90de03b2d918, type: 3}
+    - {fileID: 8300000, guid: 1fe3dd992849b504f9a85abd85c31927, type: 3}
+  footstepSounds: []
+--- !u!4 &1528615003
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1528615001}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1529868548
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -28590,6 +28665,7 @@ SceneRoots:
   - {fileID: 375194868}
   - {fileID: 1384652532}
   - {fileID: 1647004829}
+  - {fileID: 1528615003}
   - {fileID: 1464893539}
   - {fileID: 657194226}
   - {fileID: 363374213}
