@@ -34,7 +34,7 @@ public class Scoreboard : MonoBehaviourPunCallbacks
         ScoreboardItem item = Instantiate(scoreboardItemPrefab,container).GetComponent<ScoreboardItem>();
         item.Initalize(player);
         scoreboardItems[player] = item;
-    }
+    }                   
 
     void RemoveScoreboardItem(Player player)
     {

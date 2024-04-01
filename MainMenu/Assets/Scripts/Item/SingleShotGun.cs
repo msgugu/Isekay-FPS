@@ -60,11 +60,6 @@ public class SingleShotGun : Gun
         shooter = GetComponentInParent<Shooter>();
     }
 
-    private void OnDestroy()
-    {
-        //onRecoil -= ApplyRecoil; // 올바른 이벤트에서 메서드 연결 해제 방법
-    }
-
     public override void Use()
     {
         if (!PV.IsMine) return;
@@ -81,6 +76,7 @@ public class SingleShotGun : Gun
                 else
                 {
                     Shoot();
+                    count = 0;
                     _lastFireTime = Time.time; // 마지막 발사 시간 업데이트
                 }
             }
@@ -149,7 +145,7 @@ public class SingleShotGun : Gun
             PV.RPC("RPC_Shoot", RpcTarget.All, hit.point, hit.normal);
         }
         _bullet--;
-        if (count < 3 && isAuto)
+        if (count > 3 && isAuto)
         {
             StartCoroutine(ApplyRecoil());
         }
