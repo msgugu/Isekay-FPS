@@ -93,7 +93,7 @@ public class SoundManager : MonoBehaviour
 
         audioSource.spatialBlend = 1.0f; // 3D 사운드로 설정
         audioSource.minDistance = 10.0f; // 최소 거리
-        audioSource.maxDistance = 100.0f; // 최대 거리
+        audioSource.maxDistance = 50.0f; // 최대 거리
 
         audioSource.clip = clip;
         audioSource.Play();

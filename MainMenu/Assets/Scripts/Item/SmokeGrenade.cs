@@ -27,12 +27,18 @@ public class SmokeGrenade : MonoBehaviour
 
     IEnumerator ExplodeAfterDelay(float delay)
     {
-        AudioSource.PlayClipAtPoint(explodeSound, transform.position);
+        PV.RPC("RPC_PlayExplodeSound", RpcTarget.All, transform.position);
 
         yield return new WaitForSeconds(delay); // 처음 지연
 
         // 모든 클라이언트에서 폭발 효과를 생성하고 15초 후에 파괴합니다.
         PV.RPC("RPC_Explode", RpcTarget.All, transform.position + Vector3.up);
+    }
+    
+    [PunRPC]
+    void RPC_PlayExplodeSound(Vector3 position)
+    {
+        AudioSource.PlayClipAtPoint(explodeSound, position);
     }
 
     [PunRPC]
@@ -44,6 +50,7 @@ public class SmokeGrenade : MonoBehaviour
         // 10초 후에 이펙트 파괴
         StartCoroutine(DestroyAfter(smokeEffectInstance, 15f));
     }
+
 
     IEnumerator DestroyAfter(GameObject target, float delay)
     {
