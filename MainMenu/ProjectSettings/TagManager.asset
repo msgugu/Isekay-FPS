@@ -13,12 +13,12 @@ TagManager:
   - Water
   - UI
   - Ground
-  - 
+  - MiniMap
   - PostProcessing
   - Player
   - Weapon
-  - 
-  - 
+  - LocalPlayer
+  - Wall
   - 
   - 
   - 
