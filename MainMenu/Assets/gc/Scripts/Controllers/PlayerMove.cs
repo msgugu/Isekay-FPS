@@ -94,7 +94,6 @@ namespace Isekai.GC
             }
             Vector3 moveVec = new Vector3(_horizontal, 0, _vertical);
             rb.MovePosition(rb.position + transform.TransformDirection(moveVec) * Time.fixedDeltaTime);
-
         }
 
         /// <summary>

@@ -3332,8 +3332,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemInfo: {fileID: 11400000, guid: 8a17743968c850749b155511c39e1811, type: 2}
   itemGameObject: {fileID: 6892029176436660958}
+  fireMode: 0
+  BulletMuzzlePosition: {fileID: 0}
+  BulletMuzzleEffect: {fileID: 0}
   bulletImpactPrefab: {fileID: 2000214013040110532, guid: ef9264ffe838b494b8607dcc76304d27, type: 3}
+  bulletImpactFlesh: {fileID: 0}
+  crosshair: {fileID: 0}
+  weaponType: 
+  isAuto: 0
   cam: {fileID: 43538123648573313}
+  virtualCam: {fileID: 0}
+  recoilRecoverySpeed: 1
+  maxRecoil: 5
+  _reloadImage: {fileID: 0}
 --- !u!114 &8693659060471808991
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3550,6 +3561,12 @@ MonoBehaviour:
   - Type: 3
     SynchronizeType: 2
     Name: GunType
+  - Type: 4
+    SynchronizeType: 0
+    Name: IsShoot
+  - Type: 9
+    SynchronizeType: 0
+    Name: IsThrow
   m_SynchronizeLayers:
   - SynchronizeType: 2
     LayerIndex: 0
@@ -3661,8 +3678,9 @@ MonoBehaviour:
   _mouseSensitivity: 3
   _smoothTime: 0.15
   rb: {fileID: 6137028803876444511}
-  speed: 5
-  playerCamera: {fileID: 43538123648573313}
+  walkSpeed: 5
+  sprintSpeed: 10
+  playerCamera: {fileID: 0}
   _weaponCamera: {fileID: 0}
 --- !u!114 &3699047083691836700
 MonoBehaviour:
@@ -3676,10 +3694,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: baff41d98bd66ef45999c9fb494e404a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Ammo: {fileID: 0}
   items:
   - {fileID: 3656912389362527166}
   - {fileID: 1675664161708090021}
   - {fileID: 8807766210504788326}
+  auto: []
+  weaponImage: []
+  toggleFireModeKey: 102
+  reloadKey: 114
 --- !u!114 &7762403657780208694
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3693,6 +3716,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   healthProgressBar: {fileID: 0}
+  HealImage: {fileID: 0}
+  BloodImage: {fileID: 0}
 --- !u!1 &3839325929046242544
 GameObject:
   m_ObjectHideFlags: 0
@@ -6730,10 +6755,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcbee5b3469a4174785ff98911e00c78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemInfo: {fileID: 11400000, guid: 5d1b7296c86c2e14aa8ebe625e6cb9ba, type: 2}
+  itemInfo: {fileID: 0}
   itemGameObject: {fileID: 6746723363753463158}
+  fireMode: 0
+  BulletMuzzlePosition: {fileID: 0}
+  BulletMuzzleEffect: {fileID: 0}
   bulletImpactPrefab: {fileID: 2000214013040110532, guid: ef9264ffe838b494b8607dcc76304d27, type: 3}
+  bulletImpactFlesh: {fileID: 0}
+  crosshair: {fileID: 0}
+  weaponType: 
+  isAuto: 0
   cam: {fileID: 43538123648573313}
+  virtualCam: {fileID: 0}
+  recoilRecoverySpeed: 1
+  maxRecoil: 5
+  _reloadImage: {fileID: 0}
 --- !u!114 &3659742165780684084
 MonoBehaviour:
   m_ObjectHideFlags: 0
