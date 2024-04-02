@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:MainMenu/Assets/YS/Images.meta
 guid: 25cb99ea72dfe0842b5cff354aaa9eb4
+========
+guid: 77115e196effcec488d933843df071c9
+>>>>>>>> YS1:MainMenu/Assets/YS.meta
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}

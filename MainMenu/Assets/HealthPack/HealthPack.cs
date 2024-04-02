@@ -20,7 +20,7 @@ public class HealthPack : MonoBehaviour
     /// <summary>
     /// 나중에 추가 할 수 있으면 이펙트랑 사운드 추가
     /// </summary>
-    //public ParticleSystem pickupEffect;
+    public ParticleSystem pickupEffect; // 힐팩을 플레이어가 먹었을때 나올 이팩트
     //public AudioClip pickupSound;
     //private AudioSource audioSource;
 
@@ -37,11 +37,24 @@ public class HealthPack : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         //Debug.Log("OnTriggerEnter called with: " + other.name);
-        Debug.Log("씨발아!");
         if (!isRespawning && other.CompareTag("Player"))
         {
             other.gameObject.GetComponent<IDamageable>()?.TakeHeal(healthAmount);
+            PlayPickupEffect(other.transform.position);
             StartCoroutine(Respawn()); // 코루틴 Respawn 시작
+        }
+    }
+
+    private void PlayPickupEffect(Vector3 position)
+    {
+        if(pickupEffect != null)
+        {
+            // 파티클 이펙트 플레이어 위치에 생성.
+            ParticleSystem effectInstance = Instantiate(pickupEffect, position, Quaternion.identity);
+            effectInstance.Play();
+
+            // 파티클 이펙트 효과가 끝나면 오브젝트 삭제.
+            Destroy(effectInstance.gameObject, effectInstance.main.duration);
         }
     }
 

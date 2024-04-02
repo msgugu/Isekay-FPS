@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:MainMenu/Assets/YS/Images/Materials.meta
 guid: d4a1b1451273c0d4a9c4734eea1ad0e6
+========
+guid: 823f6c9a64133184ea1c50bbd3d0248e
+>>>>>>>> YS1:MainMenu/Assets/YS/Bullet.meta
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}
