@@ -40,7 +40,7 @@ public class HealthPack : MonoBehaviour
         if (!isRespawning && other.CompareTag("Player"))
         {
             other.gameObject.GetComponent<IDamageable>()?.TakeHeal(healthAmount);
-            PlayPickupEffect(other.transform.position);
+            PlayPickupEffect(other.transform.position); // 파티클 이펙트 재생.
             StartCoroutine(Respawn()); // 코루틴 Respawn 시작
         }
     }
@@ -78,17 +78,15 @@ public class HealthPack : MonoBehaviour
             yield return null;
 
         }
-
-        CompleteCooldown();
         
-        // 시간 지연 끝나면 렌더러와 콜라이더 다시 활성화
-        cooldownUI.fillAmount = 0; // UI 이미지 숨김
-        isRespawning = false; // 리스폰 완료
+        CompleteCooldown();
+        //cooldownUI.fillAmount = 0; // UI 이미지 숨김
+        //isRespawning = false; // 리스폰 완료
 
     }
 
     /// <summary>
-    /// 쿨타임 시간이 완료 되면 UI 이미지 다시 숨김
+    /// 쿨타임 시간이 완료 되면 UI 이미지 다시 숨기고 렌더러와 콜라이더 활성화.
     /// </summary>
     private void CompleteCooldown()
     {

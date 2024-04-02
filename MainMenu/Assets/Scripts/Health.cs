@@ -26,8 +26,8 @@ public class Health : MonoBehaviour, IDamageable
     void Start()
     {
         UpdateHealthBar();
-        HealImage.SetActive(false);
-        BloodImage.SetActive(false);
+        HealImage.SetActive(false); // UI Image 비활성화
+        BloodImage.SetActive(false); // UI Image 비활성화
     }
 
     public void TakeDamage(float damage)
@@ -70,7 +70,7 @@ public class Health : MonoBehaviour, IDamageable
     {
         currentHealth = hp;
         UpdateHealthBar();
-        ShowHealImage();
+        ShowHealImage(); // 체력 회복 할때 보일 UI Image
         CheckHealStatus(); // 체력 체크
         Debug.Log(currentHealth);
     }
@@ -97,30 +97,38 @@ public class Health : MonoBehaviour, IDamageable
     {
         if (PV.IsMine)
         {
-            if(currentHealth <= maxHealth * 0.3f)
+            if(currentHealth <= maxHealth * 0.3f) // 최대 체력의 30% 이하면
             {
-                BloodImage.SetActive(true);
+                BloodImage.SetActive(true); // UI Image 활성화
             }
             else
             {
-                BloodImage.SetActive(false);
+                BloodImage.SetActive(false); // 최대 체력 30%보다 높으면 UI Image 비활성화
             }
         }
     }
 
+    /// <summary>
+    /// 체력이 회복 될때 나올 UI Image
+    /// </summary>
     void ShowHealImage()
     {
-        if (PV.IsMine)
+        if (PV.IsMine) // 로컬 플레이어 확인
         {
-            HealImage.SetActive(true);
-            StartCoroutine(HideHealImageAfterTime(1f));
+            HealImage.SetActive(true); // 체력 회복 UI Image 활성화
+            StartCoroutine(HideHealImageAfterTime(1f)); // 1초뒤 비활성화
         }
     }
 
+    /// <summary>
+    /// 일정 시간 뒤에 UI Image 비활성화 시키기.
+    /// </summary>
+    /// <param name="time"> 시간 정하기. </param>
+    /// <returns> 일정 시간 동안 기다리기. </returns>
     IEnumerator HideHealImageAfterTime(float time)
     {
         yield return new WaitForSeconds(time);
-        HealImage.SetActive(false);
+        HealImage.SetActive(false); // UI Image 비활성화.
     }
 
 }

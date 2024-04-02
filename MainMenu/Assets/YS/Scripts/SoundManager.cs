@@ -2,7 +2,7 @@ using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static SoundManager;
+//using static SoundManager;
 
 
 public class SoundManager : MonoBehaviour
@@ -13,14 +13,14 @@ public class SoundManager : MonoBehaviour
     [System.Serializable]
     public struct GunSound // 총 타입, 소리 배열
     {
-        public string gunType;
-        public AudioClip[] clips;
+        public string gunType; // 총 타입
+        public AudioClip[] clips; // 총기 소리 클립 배열
     }
 
     [System.Serializable]
     public struct FootstepSound // 지형 타입, 걷기 뛰기 소리 배열
     {
-        public string surfaceType;
+        public string surfaceType; // 지형 타입
         public AudioClip[] walkingFootstepSounds; // 걷는 소리 클립 배열
         public AudioClip[] runningFootstepSounds; // 달리는 소리 클립 배열
     }

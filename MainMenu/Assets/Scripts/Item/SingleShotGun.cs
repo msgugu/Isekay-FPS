@@ -39,7 +39,7 @@ public class SingleShotGun : Gun
     bool _isFiring;                                                     //
     Shooter shooter;
     GunShake gunShake;
-    AudioSource audioSource;
+    AudioSource audioSource;                                            // 총기 오브젝트에서 소리가 나오게 함.
 
     private void Awake()
     {
@@ -112,7 +112,7 @@ public class SingleShotGun : Gun
         if (_maxBullet == _bullet) yield break;
         reload = true;
 
-        SoundManager.instance.PlayReloadSound(transform.position);
+        SoundManager.instance.PlayReloadSound(transform.position); // 재장전 사운드 재생.
 
         _reloading = _reloadTime;
         _reloadImage.gameObject.SetActive(true);
@@ -170,7 +170,7 @@ public class SingleShotGun : Gun
             }
             count++;
 
-            if (PV.IsMine)
+            if (PV.IsMine) // 로컬 플레이어
             {
                 BulletMuzzleEffect.gameObject.layer = LayerMask.NameToLayer("Weapon");
                 BulletMuzzleEffect.Play();
