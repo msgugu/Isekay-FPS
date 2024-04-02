@@ -52,6 +52,7 @@ MonoBehaviour:
   - RPC_CreateKillLog
   - RPC_PlayerShootSound
   - RPC_PlayExplodeSound
+  - PlayPickupEffectOnPlayer
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
