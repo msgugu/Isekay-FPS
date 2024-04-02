@@ -7,7 +7,7 @@ using Cinemachine;
 
 namespace Isekai.GC
 {
-    public class PlayerMove : MonoBehaviour// IPunObservable
+    public class PlayerMove : MonoBehaviour, IPunObservable
     {
 
         PhotonView PV;
@@ -43,6 +43,9 @@ namespace Isekai.GC
         private Vector3 originPos = Vector3.zero;
         private Quaternion originRot = Quaternion.identity;
         [SerializeField] private Camera _weaponCamera;
+
+
+
 
 
         private void Awake()
@@ -152,7 +155,21 @@ namespace Isekai.GC
             }
         }
 
-        
+        void IPunObservable.OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+        {
+            if (stream.IsWriting)
+            {
+                // 데이터를 보낼 때, 즉 로컬 오브젝트의 상태를 다른 플레이어와 동기화할 때
+                stream.SendNext(transform.position);
+                Debug.Log($"Sending position data: {transform.position}");
+            }
+            else
+            {
+                // 데이터를 받을 때, 즉 다른 플레이어의 오브젝트 상태를 로컬로 동기화할 때
+                transform.position = (Vector3)stream.ReceiveNext();
+                Debug.Log($"Received position data: {transform.position}" + "다른오브젝트 상태 로컬로 동기화");
+            }
+        }
     }
 }
 

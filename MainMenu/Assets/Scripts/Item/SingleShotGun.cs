@@ -286,17 +286,3 @@ public class SingleShotGun : Gun
         SoundManager.instance.PlayRandomSound(weaponType, transform.position);
     }
 }
-
-//if (Physics.Raycast(ray, out RaycastHit hit))
-//{
-//    hit.collider.gameObject.GetComponent<IDamageable>()?.TakeDamage(((GunInfo)itemInfo).bamage);
-//    PV.RPC("RPC_Shoot", RpcTarget.All, hit.point, hit.normal);
-//}
-//_bullet--;
-//if (count > 3 && isAuto)
-//{
-//    StartCoroutine(ApplyRecoil());
-//}
-//count++;
-//shooter?.UpdateBullets(_bullet); // Null 조건부 접근 연산자 사용
-//crosshair.OnShoot();
