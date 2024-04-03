@@ -30,22 +30,21 @@ public class SoundManager : MonoBehaviour
     public AudioClip[] emptyMagazineSounds; // 탄이 모두 소모 되었을때 마지막 텅 하는 소리
     public AudioClip[] noAmmoSounds; // 탄이 모두 비었는데 계속 쏘려고 하면 나는 소리
 
-    public GunSound[] gunSoundArray; // 여러가지 총들을 위한 사격 소리 배열
-    public FootstepSound[] footstepSounds; // 여러가지 지형에 대한 발 소리 배열
+    public GunSound[] gunSoundArray; // 총 타입, 사운드의 정보 배열
+    public FootstepSound[] footstepSounds; // 지형 타입, 발걸음 사운드 정보 배열
 
     #region Singleton
-    static public SoundManager instance;
-    //private AudioSource audioSource;
+    static public SoundManager instance; // 어디서든 사용 할 수 있게 인스턴스화 시킨다
 
     private void Awake()
     {
         if (instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(gameObject);
+            DontDestroyOnLoad(gameObject); // 씬이 바뀌어도 파괴되지 않게 함
 
-            gunSounds = new Dictionary<string, AudioClip[]>();
-
+            gunSounds = new Dictionary<string, AudioClip[]>(); // 초기화 하고 정보 다시 추가
+            
             foreach(var gunSound in gunSoundArray)
             {
                 gunSounds[gunSound.gunType] = gunSound.clips;
@@ -55,42 +54,33 @@ public class SoundManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-
-        //audioSource = GetComponent<AudioSource>();
-        //if (audioSource == null)
-        //{
-        //    audioSource = gameObject.AddComponent<AudioSource>();
-        //}
     }
     #endregion
 
 
     /// <summary>
-    /// 총 소리 배열에 있는 클립을 랜덤 재생
+    /// 총 소리 랜덤 재생
     /// </summary>
     /// <param name="gunType"> 총기 타입 ex) AR, SR </param>
-    /// <param name="position"> 총기 오브젝트 위치 (소리가 나올 위치) </param>
+    /// <param name="position"> 총기 오브젝트 위치 (오디오가 재생될 위치) </param>
     public void PlayRandomSound(string gunType, Vector3 position)
     {
-        if (!gunSounds.ContainsKey(gunType))
-        {
-            return;
-        }
+        if (!gunSounds.ContainsKey(gunType)) return; // 총기 타입이 없으면 종료
 
         AudioClip[] clips = gunSounds[gunType];
-        if (clips.Length == 0)
-        {
-            return;
-        }
+        
+        if (clips.Length == 0) return; // 오디오 클립이 없으면 종료
 
+        // 랜덤으로 재생
         int randomIndex = Random.Range(0, clips.Length);
         AudioClip clip = clips[randomIndex];
 
         // 동적 AudioSource 생성 및 사운드 재생
         GameObject soundObject = new GameObject("SoundObject_" + gunType);
-        soundObject.transform.position = position; // 사운드 재생 위치 설정
+        soundObject.transform.position = position;
         AudioSource audioSource = soundObject.AddComponent<AudioSource>();
 
+        // 오디오소스 컴포넌트 인스펙터 설정 값
         audioSource.spatialBlend = 1.0f; // 3D 사운드로 설정
         audioSource.minDistance = 10.0f; // 최소 거리
         audioSource.maxDistance = 50.0f; // 최대 거리
@@ -104,7 +94,7 @@ public class SoundManager : MonoBehaviour
     /// <summary>
     /// 총 장전 소리
     /// </summary>
-    /// <param name="position"> 오브젝트의 위치 </param>
+    /// <param name="position"> 오디오 재생 위치 </param>
     public void PlayReloadSound(Vector3 position)
     {
         if (reloadSound != null)
@@ -144,3 +134,10 @@ public class SoundManager : MonoBehaviour
         }
     }
 }
+
+//private AudioSource audioSource;
+//audioSource = GetComponent<AudioSource>();
+//if (audioSource == null)
+//{
+//    audioSource = gameObject.AddComponent<AudioSource>();
+//}
