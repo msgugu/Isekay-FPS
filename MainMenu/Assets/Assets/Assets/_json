@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "504128851116",
+    "project_id": "project-isekai-fps",
+    "storage_bucket": "project-isekai-fps.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:504128851116:android:d4dafe19e6a09900562309",
+        "android_client_info": {
+          "package_name": "com.firebase.ProjectIsekaiFps"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAvAhoT2ecXB2w84NgD_XJ4aQqlPfMIbAE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
