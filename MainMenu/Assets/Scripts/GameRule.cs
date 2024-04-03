@@ -7,6 +7,7 @@ using Isekai.GC;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 
 
 public class GameRule : MonoBehaviourPunCallbacks
@@ -19,6 +20,8 @@ public class GameRule : MonoBehaviourPunCallbacks
 
     private PlayerManager playerManager; // PlayerManager 클래스의 인스턴스에 대한 참조를 저장합니다.
     private bool gameStarted = false; // 게임이 시작되었는지 여부를 나타내는 플래그입니다.
+    [SerializeField] GameObject WUi;
+    [SerializeField] TMP_Text WUiplayer;
 
     public TimeSpan RemainingTime
     {
@@ -74,8 +77,6 @@ public class GameRule : MonoBehaviourPunCallbacks
     void StartGame()
     {
         EnablePlayerControls();
-        Debug.Log("게임이 시작됩니다.");
-
         // 게임이 시작되면 게임 시작 시간을 현재 시간으로 갱신합니다.
         gameStartTime = DateTime.Now;
 
@@ -97,7 +98,6 @@ public class GameRule : MonoBehaviourPunCallbacks
         TimeSpan elapsedTime = DateTime.Now - gameStartTime;
         if (elapsedTime.TotalSeconds >= gameDuration)
         {
-            Debug.Log("시간 초과로 게임이 종료됩니다.");
             EndGame(); // 게임을 종료합니다.
         }
     }
@@ -115,7 +115,7 @@ public class GameRule : MonoBehaviourPunCallbacks
                 // 게임을 종료합니다.
                 if ((int)playerKills >= _targetKill)
                 {
-                    Debug.Log(player.NickName + "가 30킬을 달성하여 게임에서 승리하였습니다.");
+                    WUiplayer.text = player.NickName.ToString();
                     EndGame();
                     break; // 게임 종료 조건을 충족하므로 더 이상의 검사는 필요 없으므로 반복문을 종료합니다.
                 }
@@ -127,10 +127,11 @@ public class GameRule : MonoBehaviourPunCallbacks
     {
         gameEnded = true; // 게임이 종료되었음을 표시합니다.
         StartCoroutine(DisablePlayerControlsDis());
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.Confined;
+        WUi.SetActive(true);
 
-        Debug.Log("게임 종료!");
-        Debug.Log("승리자: "); // 승리자를 선언하고 콘솔에 출력합니다.
-
+        /*
         // 모든 플레이어의 킬 수를 출력합니다.
         foreach (Player player in PhotonNetwork.PlayerList)
         {
@@ -142,7 +143,7 @@ public class GameRule : MonoBehaviourPunCallbacks
                 Debug.Log(player.NickName + ": " + kills + " 킬");
             }
         }
-        Debug.Log("게임이 종료되었습니다.");
+        */
         PhotonNetwork.CurrentRoom.IsOpen = true; // 게임이 종료되면 방을 다시 열어 새 게임을 준비합니다.
 
         // 플레이어 매니저가 존재하면 킬 수를 초기화합니다.

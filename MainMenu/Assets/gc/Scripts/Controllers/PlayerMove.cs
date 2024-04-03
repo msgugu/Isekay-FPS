@@ -4,10 +4,12 @@ using UnityEngine;
 using Isekai.GC.Ani;
 using Photon.Pun;
 using Cinemachine;
+using Photon.Realtime;
+using Photon.Pun.UtilityScripts;
 
 namespace Isekai.GC
 {
-    public class PlayerMove : MonoBehaviour, IPunObservable
+    public class PlayerMove : MonoBehaviourPun, IPunObservable
     {
 
         PhotonView PV;
@@ -45,21 +47,18 @@ namespace Isekai.GC
         [SerializeField] private Camera _weaponCamera;
 
 
-
-
-
         private void Awake()
         {
             _animator = GetComponent<Animator>();
             rb = GetComponent<Rigidbody>();
-            PV = GetComponent<PhotonView>();
+            PV = photonView;//  GetComponent<PhotonView>();
             if (!PV.IsMine)
             {
                 Destroy(playerCamera);
                 Destroy(GetComponentInChildren<Camera>().gameObject);
                 Destroy(_weaponCamera);
             }
-            
+
         }
 
         private void Start()
@@ -69,8 +68,16 @@ namespace Isekai.GC
             Cursor.visible = false;
             _neck = _animator.GetBoneTransform(HumanBodyBones.Neck);
 
-        }
 
+            //foreach (Player p in PhotonNetwork.PlayerList)
+            //{
+            //    if (PV.IsMine)
+            //    {
+            //        Debug.Log("0" + p.ActorNumber);
+            //    }
+            //}
+
+        }
 
         private void Update()
         {
@@ -79,24 +86,45 @@ namespace Isekai.GC
             Zoom();
         }
 
+
+        private Vector3 latestPos;
+        private Quaternion latestRot;
         /// <summary>
         /// 플레이어 이동 관련
         /// </summary>
-        private void FixedUpdate()    
+        private void FixedUpdate()
         {
-            if (!PV.IsMine) return;
-            if (Input.GetKey(KeyCode.LeftShift))
+
+
+
+            if (PV.IsMine)
             {
-                _horizontal = Input.GetAxis("Horizontal") * sprintSpeed;
-                _vertical = Input.GetAxis("Vertical") * sprintSpeed;
+                if (Input.GetKey(KeyCode.LeftShift))
+                {
+                    _horizontal = Input.GetAxis("Horizontal") * sprintSpeed;
+                    _vertical = Input.GetAxis("Vertical") * sprintSpeed;
+                }
+                else
+                {
+                    _horizontal = Input.GetAxis("Horizontal") * walkSpeed;
+                    _vertical = Input.GetAxis("Vertical") * walkSpeed;
+                }
+                Vector3 moveVec = new Vector3(_horizontal, 0, _vertical);
+                rb.MovePosition(rb.position + transform.TransformDirection(moveVec) * Time.fixedDeltaTime);
             }
             else
             {
-                _horizontal = Input.GetAxis("Horizontal") * walkSpeed;
-                _vertical = Input.GetAxis("Vertical") * walkSpeed;
+                //Debug.Log(PhotonNetwork.LocalPlayer.ActorNumber);
+                foreach (Player p in PhotonNetwork.PlayerList)
+                {
+                    if (p.ActorNumber == PhotonNetwork.LocalPlayer.ActorNumber)
+                    {
+                        transform.position = Vector3.Lerp(transform.position, this.latestPos, Time.deltaTime * 10);  // this.latestPos;// Vector3.Lerp(transform.position, this.latestPos, Tim)
+                        transform.rotation = Quaternion.Lerp(transform.rotation, this.latestRot, Time.deltaTime * 10);
+                        break;
+                    }
+                }
             }
-            Vector3 moveVec = new Vector3(_horizontal, 0, _vertical);
-            rb.MovePosition(rb.position + transform.TransformDirection(moveVec) * Time.fixedDeltaTime);
         }
 
         /// <summary>
@@ -155,21 +183,35 @@ namespace Isekai.GC
             }
         }
 
-        void IPunObservable.OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+        /*
+        private void OnGUI()
         {
-            if (stream.IsWriting)
+            GUIStyle myStyle = new GUIStyle();
+            if (PV.IsMine)
             {
-                // 데이터를 보낼 때, 즉 로컬 오브젝트의 상태를 다른 플레이어와 동기화할 때
-                stream.SendNext(transform.position);
-                Debug.Log($"Sending position data: {transform.position}");
+
+                myStyle.fontSize = 80; // 글자 크기를 30으로 설정
+                GUI.Label(new Rect(0, 0, 1000, 100), transform.position + " me", myStyle);
             }
             else
             {
-                // 데이터를 받을 때, 즉 다른 플레이어의 오브젝트 상태를 로컬로 동기화할 때
-                transform.position = (Vector3)stream.ReceiveNext();
-                Debug.Log($"Received position data: {transform.position}" + "다른오브젝트 상태 로컬로 동기화");
+                GUI.Label(new Rect(0, 100, 1000, 100), transform.position + " you", myStyle);
+            }
+        }
+        */
+
+        public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+        {
+            if (stream.IsWriting)
+            {
+                stream.SendNext(transform.position);
+                stream.SendNext(transform.rotation);
+            }
+            else
+            {
+                this.latestPos = (Vector3)stream.ReceiveNext();
+                this.latestRot = (Quaternion)stream.ReceiveNext();
             }
         }
     }
-}
-
+}   
