@@ -4,10 +4,18 @@ using Photon.Pun;
 using System.IO;
 using UnityEngine.UIElements;
 
+/// <summary>
+/// 연막 수류탄 이펙트 & 사운드
+/// </summary>
 public class SmokeGrenade : MonoBehaviour
 {
     //GameObject smokeEffectInstance; // 생성된 폭발 효과 인스턴스
-    public AudioClip explodeSound; // 연막 폭발 사운드
+    
+    /// <summary>
+    /// 연막 폭발 사운드
+    /// </summary>
+    public AudioClip explodeSound; 
+    
     PhotonView PV;
 
 
@@ -19,9 +27,11 @@ public class SmokeGrenade : MonoBehaviour
 
     private void Start()
     {
-        if (PV.IsMine) // 로컬 플레이어에 의해 생성된 오브젝트인지 확인
+        // 로컬 플레이어에 의해 생성된 오브젝트인지 확인
+        if (PV.IsMine) 
         {
-            StartCoroutine(ExplodeAfterDelay(2f)); // 2초 후에 폭발 시작
+            // 2초 후에 폭발 시작
+            StartCoroutine(ExplodeAfterDelay(2f)); 
         }
     }
 

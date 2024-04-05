@@ -8,8 +8,16 @@ public class Health : MonoBehaviour, IDamageable
 {
     // UI 
     public Test_UIProgressBar healthProgressBar;
-    public GameObject HealImage; // 회복하면 나오는 UI Image
-    public GameObject BloodImage; // 체력이 없으면 나오는 UI Image
+    
+    /// <summary>
+    /// 회복하면 나오는 UI Image
+    /// </summary>
+    public GameObject HealImage; 
+
+    /// <summary>
+    /// 체력이 없으면 나오는 UI Image
+    /// </summary>
+    public GameObject BloodImage; 
 
     const float maxHealth = 100f;
     float currentHealth = maxHealth;
@@ -26,8 +34,12 @@ public class Health : MonoBehaviour, IDamageable
     void Start()
     {
         UpdateHealthBar();
-        HealImage.SetActive(false); // UI Image 비활성화
-        BloodImage.SetActive(false); // UI Image 비활성화
+
+        // UI Image 비활성화
+        HealImage.SetActive(false);
+        
+        // UI Image 비활성화
+        BloodImage.SetActive(false); 
     }
 
     public void TakeDamage(float damage)
@@ -41,7 +53,9 @@ public class Health : MonoBehaviour, IDamageable
 
         currentHealth -= damage;
         UpdateHealthBar();
-        CheckHealStatus(); // 체력 체크
+
+        // 체력 체크
+        CheckHealStatus(); 
 
         //healthbarImage.fillAmount = currentHealth / maxHealth;
         if (currentHealth <= 0)
@@ -57,21 +71,29 @@ public class Health : MonoBehaviour, IDamageable
     {
         currentHealth += hp;
 
-        if (currentHealth > maxHealth) // 조건을 수정하여 체력이 maxHealth를 초과하지 않도록 함
+        // 조건을 수정하여 체력이 maxHealth를 초과하지 않도록 함
+        if (currentHealth > maxHealth) 
         {
             currentHealth = maxHealth;
         }
 
-        PV.RPC(nameof(RPC_TakeHeal), PV.Owner, currentHealth); // 메소드 이름을 올바르게 수정
+        // 메소드 이름을 올바르게 수정
+        PV.RPC(nameof(RPC_TakeHeal), PV.Owner, currentHealth); 
     }
 
     [PunRPC]
-    void RPC_TakeHeal(float hp) // 메소드 이름을 올바르게 수정
+    // 메소드 이름을 올바르게 수정
+    void RPC_TakeHeal(float hp) 
     {
         currentHealth = hp;
         UpdateHealthBar();
-        ShowHealImage(); // 체력 회복 할때 보일 UI Image
-        CheckHealStatus(); // 체력 체크
+        
+        // 체력 회복 할때 보일 UI Image
+        ShowHealImage(); 
+        
+        // 체력 체크
+        CheckHealStatus(); 
+        
         Debug.Log(currentHealth);
     }
 
@@ -97,13 +119,16 @@ public class Health : MonoBehaviour, IDamageable
     {
         if (PV.IsMine)
         {
-            if(currentHealth <= maxHealth * 0.3f) // 최대 체력의 30% 이하면
+            // 최대 체력의 30% 이하면
+            if(currentHealth <= maxHealth * 0.3f) 
             {
-                BloodImage.SetActive(true); // UI Image 활성화
+                // UI Image 활성화
+                BloodImage.SetActive(true); 
             }
             else
             {
-                BloodImage.SetActive(false); // 최대 체력 30%보다 높으면 UI Image 비활성화
+                // 최대 체력 30%보다 높으면 UI Image 비활성화
+                BloodImage.SetActive(false); 
             }
         }
     }
@@ -113,10 +138,14 @@ public class Health : MonoBehaviour, IDamageable
     /// </summary>
     void ShowHealImage()
     {
-        if (PV.IsMine) // 로컬 플레이어 확인
+        // 로컬 플레이어 확인
+        if (PV.IsMine) 
         {
-            HealImage.SetActive(true); // 체력 회복 UI Image 활성화
-            StartCoroutine(HideHealImageAfterTime(1f)); // 1초뒤 비활성화
+            // 체력 회복 UI Image 활성화
+            HealImage.SetActive(true); 
+            
+            // 1초뒤 비활성화
+            StartCoroutine(HideHealImageAfterTime(1f)); 
         }
     }
 
@@ -128,7 +157,9 @@ public class Health : MonoBehaviour, IDamageable
     IEnumerator HideHealImageAfterTime(float time)
     {
         yield return new WaitForSeconds(time);
-        HealImage.SetActive(false); // UI Image 비활성화.
+        
+        // UI Image 비활성화.
+        HealImage.SetActive(false); 
     }
 
 }

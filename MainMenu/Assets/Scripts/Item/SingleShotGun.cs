@@ -26,20 +26,33 @@ public class SingleShotGun : Gun
     private Vector3 originalCameraRotation; // 카메라의 원래 회전값 저장
     private Vector3 currentRecoilOffset = Vector3.zero; // 현재 반동에 의한 회전값 오프셋
 
-    bool reload = false;                                                // 재장전 중 일때는 총 발사 안되도록 
-    float _reloadTime;                                                  // 건 info에서 받아올 변수
+    // 재장전 중 일때는 총 발사 안되도록 
+    bool reload = false;                                                
+    
+    // 건 info에서 받아올 변수
+    float _reloadTime;                                                  
     float _reloading;
 
     int count;
-    int _bullet;                                                        // 건 info에서 받아올 기본 총알 갯수
-    int _maxBullet;                                                     // 맥스 총알 설정
-    float _fireRate;                                                    // 건 인포에서 받아오기 초당 발사 하는 총알 갯수
-    float _lastFireTime;                                                //
-    PhotonView PV;                                                      // 자기 자신 찾기 위한 포톤뷰
-    bool _isFiring;                                                     //
+    
+    // 건 info에서 받아올 기본 총알 갯수
+    int _bullet;                                                        
+    
+    // 맥스 총알 설정
+    int _maxBullet;                                                     
+    
+    // 건 인포에서 받아오기 초당 발사 하는 총알 갯수
+    float _fireRate;                                                    
+    float _lastFireTime;                                                
+    
+    // 자기 자신 찾기 위한 포톤뷰
+    PhotonView PV;                                                      
+    bool _isFiring;                                                     
     Shooter shooter;
     GunShake gunShake;
-    AudioSource audioSource;                                            // 총기 오브젝트에서 소리가 나오게 함.
+    
+    // 총기 오브젝트에서 소리가 나오게 함.
+    AudioSource audioSource;                                            
 
     private void Awake()
     {
@@ -112,7 +125,8 @@ public class SingleShotGun : Gun
         if (_maxBullet == _bullet) yield break;
         reload = true;
 
-        SoundManager.instance.PlayReloadSound(transform.position); // 재장전 사운드 재생.
+        // 재장전 사운드 재생.
+        SoundManager.instance.PlayReloadSound(transform.position); 
 
         _reloading = _reloadTime;
         _reloadImage.gameObject.SetActive(true);
@@ -192,8 +206,12 @@ public class SingleShotGun : Gun
             SoundManager.instance.PlayNoAmmoSound(transform.position);
         }
 
-        PV.RPC("RPC_PlayerShootSound", RpcTarget.All, weaponType); // 무기 타입에 따라 소리 재생
-        shooter?.UpdateBullets(_bullet); // Null 조건부 접근 연산자 사용
+        // 무기 타입에 따라 소리 재생
+        PV.RPC("RPC_PlayerShootSound", RpcTarget.All, weaponType); 
+        
+        // Null 조건부 접근 연산자 사용
+        shooter?.UpdateBullets(_bullet); 
+        
         crosshair.OnShoot();
 
     }
@@ -247,6 +265,9 @@ public class SingleShotGun : Gun
         noise.m_FrequencyGain = 0f;
     }
 
+    /// <summary>
+    /// 총기 발사시 Muzzle 이펙트 프리팹 생성
+    /// </summary>
     [PunRPC]
     void RPC_Shoot(Vector3 hitPosition, Vector3 hitNormal, int hitLayer)
     {
@@ -272,7 +293,9 @@ public class SingleShotGun : Gun
 
         // 탄흔 프리팹 생성 위치
         GameObject bulletImpactObj = Instantiate(bulletImpact, hitPosition + hitNormal * 0.001f, Quaternion.LookRotation(hitNormal, Vector3.up) * bulletImpact.transform.rotation);
-        Destroy(bulletImpactObj, 2f); // 생성된 탄흔 일정 시간이 지난 후 삭제
+        
+        // 생성된 탄흔 일정 시간이 지난 후 삭제
+        Destroy(bulletImpactObj, 2f); 
     }
 
     /// <summary>

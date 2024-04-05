@@ -5,22 +5,41 @@ using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
 
+/// <summary>
+/// 힐 팩
+/// </summary>
 public class HealthPack : MonoBehaviour
 {
-    public float healthAmount = 50f; // 체력 회복 수치
-    public float respawnTime = 10.0f; // 힐 팩 리스폰 시간
+    /// <summary>
+    /// 체력 회복 수치
+    /// </summary>
+    public float healthAmount = 50f; 
+    
+    /// <summary>
+    /// 힐 팩 리스폰 시간
+    /// </summary>
+    public float respawnTime = 10.0f; 
 
-    private bool isRespawning = false; // 리스폰 시간 다됐는지 체크
+    /// <summary>
+    /// 리스폰 시간 다됐는지 체크
+    /// </summary>
+    private bool isRespawning = false; 
 
-    public Image cooldownUI; // 쿨 타임 표시할 UI
+    /// <summary>
+    /// 쿨 타임 표시할 UI
+    /// </summary>
+    public Image cooldownUI; 
 
 
     //private bool isCooldown = false; // 힐 팩 리스폰 시간 체크 UI
 
     /// <summary>
-    /// 나중에 추가 할 수 있으면 이펙트랑 사운드 추가
+    /// 힐 팩 파티클 이펙트
     /// </summary>
-    public ParticleSystem pickupEffect; // 힐팩을 플레이어가 먹었을때 나올 이팩트
+    
+    // 힐팩을 플레이어가 먹었을때 나올 이팩트
+    public ParticleSystem pickupEffect; 
+    
     //public AudioClip pickupSound;
     //private AudioSource audioSource;
 
@@ -28,28 +47,42 @@ public class HealthPack : MonoBehaviour
     {
         if(cooldownUI != null)
         {
-            cooldownUI.fillAmount = 0; // UI 숨김
+            // UI 숨김
+            cooldownUI.fillAmount = 0; 
         }
         //audioSource = gameObject.AddComponent<AudioSource>();
     }
 
 
+    /// <summary>
+    /// 플레이어가 힐 팩 오브젝트에 콜라이더 범위 안에 들어오면 활성화
+    /// </summary>
+    /// <param name="other"> 콜라이더 감별 </param>
     private void OnTriggerEnter(Collider other)
     {
         //Debug.Log("OnTriggerEnter called with: " + other.name);
+        // 들어온 콜라이더의 태그가 플레이어 또는 isRespawning이 아니라면
         if (!isRespawning && other.CompareTag("Player"))
         {
             other.gameObject.GetComponent<IDamageable>()?.TakeHeal(healthAmount);
-            PlayPickupEffect(other.transform.position); // 파티클 이펙트 재생.
-            StartCoroutine(Respawn()); // 코루틴 Respawn 시작
+            
+            // 파티클 이펙트 재생.
+            PlayPickupEffect(other.transform.position); 
+            
+            // 코루틴 Respawn 시작
+            StartCoroutine(Respawn()); 
         }
     }
 
+    /// <summary>
+    /// 배치 되어있는 힐 팩을 먹었을때 이펙트
+    /// </summary>
+    /// <param name="position"> 이펙트 생성 위치 </param>
     private void PlayPickupEffect(Vector3 position)
     {
         if(pickupEffect != null)
         {
-            // 파티클 이펙트 플레이어 위치에 생성.
+            // 이펙트 생성이 힐 팩 위치에서 생성.
             ParticleSystem effectInstance = Instantiate(pickupEffect, position, Quaternion.identity);
             effectInstance.Play();
 
@@ -58,6 +91,10 @@ public class HealthPack : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 힐 팩 리스폰
+    /// </summary>
+    /// <returns></returns>
     IEnumerator Respawn()
     {
         // 리스폰 중
@@ -67,7 +104,8 @@ public class HealthPack : MonoBehaviour
         gameObject.GetComponent<Renderer>().enabled = false;
         gameObject.GetComponent<Collider>().enabled = false;
 
-        float cooldownRemaining = 0f; // 쿨타임 UI 숨겨져 있는 값
+        // 쿨타임 UI 숨겨져 있는 값
+        float cooldownRemaining = 0f; 
 
         // 리스폰 시간 만큼 UI 이미지가 점차 생겨남
         while(cooldownRemaining < respawnTime)
@@ -90,6 +128,7 @@ public class HealthPack : MonoBehaviour
     /// </summary>
     private void CompleteCooldown()
     {
+        // 리스폰 완료.
         isRespawning = false;
 
         if (cooldownUI != null)
