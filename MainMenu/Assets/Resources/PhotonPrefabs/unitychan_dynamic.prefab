@@ -19182,6 +19182,7 @@ GameObject:
   - component: {fileID: -290341842148152439}
   - component: {fileID: -3701126682389881995}
   - component: {fileID: 5994140108304910541}
+  - component: {fileID: 5954989783078148786}
   m_Layer: 9
   m_Name: unitychan_dynamic
   m_TagString: Player
@@ -19866,6 +19867,7 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 6857937670015053439}
   - {fileID: 4127396599538641594}
+  - {fileID: 5954989783078148786}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -19910,6 +19912,22 @@ MonoBehaviour:
   healthProgressBar: {fileID: 5449987229610800559}
   HealImage: {fileID: 8939299966966958772}
   BloodImage: {fileID: 3733073914881299712}
+--- !u!114 &5954989783078148786
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6019985078003100968}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 0
+  m_UseLocal: 1
 --- !u!1 &6088128869317386598
 GameObject:
   m_ObjectHideFlags: 0
@@ -32267,7 +32285,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcbee5b3469a4174785ff98911e00c78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemInfo: {fileID: 11400000, guid: 8a17743968c850749b155511c39e1811, type: 2}
+  itemInfo: {fileID: 0}
   itemGameObject: {fileID: 1227595445559574585}
   fireMode: 0
   BulletMuzzlePosition: {fileID: 2056436051528128818}

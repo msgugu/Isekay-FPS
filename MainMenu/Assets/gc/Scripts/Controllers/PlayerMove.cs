@@ -157,6 +157,7 @@ namespace Isekai.GC
 
         void IPunObservable.OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
         {
+            /*
             if (stream.IsWriting)
             {
                 // 데이터를 보낼 때, 즉 로컬 오브젝트의 상태를 다른 플레이어와 동기화할 때
@@ -169,6 +170,7 @@ namespace Isekai.GC
                 transform.position = (Vector3)stream.ReceiveNext();
                 Debug.Log($"Received position data: {transform.position}" + "다른오브젝트 상태 로컬로 동기화");
             }
+            */
         }
     }
 }
