@@ -21320,7 +21320,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3441384389076120838, guid: a73435d37034e2d41a80fb7f2f7ac1e5, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 333.6949
+      value: 353.6949
       objectReference: {fileID: 0}
     - target: {fileID: 3441384389076120838, guid: a73435d37034e2d41a80fb7f2f7ac1e5, type: 3}
       propertyPath: m_SizeDelta.y
@@ -21356,7 +21356,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3441384389076120838, guid: a73435d37034e2d41a80fb7f2f7ac1e5, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 10
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3441384389076120838, guid: a73435d37034e2d41a80fb7f2f7ac1e5, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -26968,10 +26968,10 @@ MonoBehaviour:
   m_ChildAlignment: 1
   m_Spacing: 0
   m_ChildForceExpandWidth: 1
-  m_ChildForceExpandHeight: 0
-  m_ChildControlWidth: 0
+  m_ChildForceExpandHeight: 1
+  m_ChildControlWidth: 1
   m_ChildControlHeight: 0
-  m_ChildScaleWidth: 0
+  m_ChildScaleWidth: 1
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
 --- !u!114 &1926051880

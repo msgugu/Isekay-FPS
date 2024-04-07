@@ -3,6 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// 총기 반동 카메라 무빙
+/// </summary>
 public class GunShake : MonoBehaviour
 {
     public float recoilForce = 1f; // 총 반동 힘의 크기
@@ -11,12 +14,9 @@ public class GunShake : MonoBehaviour
     private bool isRecoiling = false;
     private Vector3 originalPosition;
 
-    private void Update()
-    {
-        
-    }
-
-    // 총 발사시 호출되는 함수
+    /// <summary>
+    /// 총 발사시 호출되는 함수
+    /// </summary>
     public void Fire()
     {
         if (!isRecoiling)
@@ -28,7 +28,11 @@ public class GunShake : MonoBehaviour
         }
     }
 
-    // 반동 코루틴
+    /// <summary>
+    /// 반동 코루틴
+    /// </summary>
+    /// <param name="targetPosition"> 총이 밀려나는 맥스 위치 </param>
+    /// <returns></returns>
     IEnumerator Recoil(Vector3 targetPosition)
     {
         isRecoiling = true;

@@ -2,8 +2,10 @@ using UnityEngine;
 using System.Collections;
 using Photon.Pun;
 using System.IO;
-using UnityEngine.UIElements;
 
+/// <summary>
+/// 던저진 연막탄 로직
+/// </summary>
 public class SmokeGrenade : MonoBehaviour
 {
     //GameObject smokeEffectInstance; // 생성된 폭발 효과 인스턴스

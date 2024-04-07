@@ -4,6 +4,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// 플레이어 HP 관리
+/// </summary>
 public class Health : MonoBehaviour, IDamageable
 {
     // UI 
@@ -30,18 +33,27 @@ public class Health : MonoBehaviour, IDamageable
         BloodImage.SetActive(false);
     }
 
+    /// <summary>
+    /// 상대방이 호출할 함수 (대미지)
+    /// </summary>
+    /// <param name="damage"> 무기대미지 </param>
     public void TakeDamage(float damage)
     {
         PV.RPC(nameof(RPC_TakeDamage), PV.Owner, damage);
     }
 
+    /// <summary>
+    /// (네트워크) 데미지 받는 로직
+    /// </summary>
+    /// <param name="damage"> 무기 대미지 </param>
+    /// <param name="info"> 때리는 사람 </param>
     [PunRPC]
     void RPC_TakeDamage(float damage, PhotonMessageInfo info)
     {
 
         currentHealth -= damage;
         UpdateHealthBar();
-        CheckHealStatus(); // 체력 체크
+        CheckHealStatus(); 
 
         //healthbarImage.fillAmount = currentHealth / maxHealth;
         if (currentHealth <= 0)
@@ -53,20 +65,28 @@ public class Health : MonoBehaviour, IDamageable
 
     }
 
+    /// <summary>
+    /// 피 회복하는 로직
+    /// </summary>
+    /// <param name="hp"> 힐량 </param>
     public void TakeHeal(float hp)
     {
         currentHealth += hp;
 
-        if (currentHealth > maxHealth) // 조건을 수정하여 체력이 maxHealth를 초과하지 않도록 함
+        if (currentHealth > maxHealth) 
         {
             currentHealth = maxHealth;
         }
 
-        PV.RPC(nameof(RPC_TakeHeal), PV.Owner, currentHealth); // 메소드 이름을 올바르게 수정
+        PV.RPC(nameof(RPC_TakeHeal), PV.Owner, currentHealth); 
     }
 
+    /// <summary>
+    /// (네트워크) 피차는걸 알려주는 함수
+    /// </summary>
+    /// <param name="hp"></param>
     [PunRPC]
-    void RPC_TakeHeal(float hp) // 메소드 이름을 올바르게 수정
+    void RPC_TakeHeal(float hp) 
     {
         currentHealth = hp;
         UpdateHealthBar();
@@ -75,12 +95,17 @@ public class Health : MonoBehaviour, IDamageable
         Debug.Log(currentHealth);
     }
 
+    /// <summary>
+    /// 사망 로직 호출
+    /// </summary>
     void Die()
     {
         playerManager.Die();
     }
 
-
+    /// <summary>
+    /// UI갱신
+    /// </summary>
     void UpdateHealthBar()
     {
         if (healthProgressBar != null)
@@ -108,6 +133,9 @@ public class Health : MonoBehaviour, IDamageable
         }
     }
 
+    /// <summary>
+    /// 체력킷 먹으면 힐 이펙트
+    /// </summary>
     void ShowHealImage()
     {
         if (PV.IsMine)
@@ -116,7 +144,12 @@ public class Health : MonoBehaviour, IDamageable
             StartCoroutine(HideHealImageAfterTime(1f));
         }
     }
-
+    
+    /// <summary>
+    /// 힐 이펙트 끄기
+    /// </summary>
+    /// <param name="time"> 유지시간 </param>
+    /// <returns></returns>
     IEnumerator HideHealImageAfterTime(float time)
     {
         yield return new WaitForSeconds(time);

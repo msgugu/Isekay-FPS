@@ -7,6 +7,9 @@ using Cinemachine;
 using Unity.VisualScripting;
 using InGame.UI;
 
+/// <summary>
+/// 단발 연발 , 재장전 , 반동 등 총에 필요한 로직 
+/// </summary>
 public class SingleShotGun : Gun
 {
     public Crosshair crosshair;
@@ -69,6 +72,9 @@ public class SingleShotGun : Gun
         shooter = GetComponentInParent<Shooter>();
     }
 
+    /// <summary>
+    /// Shooter에서 불러가는 함수
+    /// </summary>
     public override void Use()
     {
         if (!PV.IsMine) return;
@@ -92,6 +98,10 @@ public class SingleShotGun : Gun
         }
     }
 
+    /// <summary>
+    /// 연발 로직
+    /// </summary>
+    /// <returns></returns>
     IEnumerator AutoFire()
     {
         _isFiring = true;
@@ -107,6 +117,10 @@ public class SingleShotGun : Gun
         count = 0;
     }
 
+    /// <summary>
+    /// 재장전 로직
+    /// </summary>
+    /// <returns></returns>
     public IEnumerator ReloadCoroutine()
     {
         if (_maxBullet == _bullet) yield break;
@@ -134,7 +148,9 @@ public class SingleShotGun : Gun
         reload = false;
     }
 
-    // 사격모드 변경 
+    /// <summary>
+    /// 사격모드 변경 
+    /// </summary>
     public void ToggleFireMode()
     {
         // isAuto가 있는 이유는 >> 저격총 같은 총은 오토 모드가 되면 안되기 때문에 
@@ -144,11 +160,17 @@ public class SingleShotGun : Gun
         SoundManager.instance.PlayFireModeChangeSound(transform.position);
     }
 
+    /// <summary>
+    /// 재정전 
+    /// </summary>
     public void Reload()
     {
         StartCoroutine(ReloadCoroutine());
     }
 
+    /// <summary>
+    /// 발사 로직
+    /// </summary>
     void Shoot()
     {
         Ray ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f));
@@ -198,6 +220,10 @@ public class SingleShotGun : Gun
 
     }
 
+    /// <summary>
+    /// 반동
+    /// </summary>
+    /// <returns></returns>
     IEnumerator ApplyRecoil()
     {
         var noise = virtualCam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
@@ -226,6 +252,11 @@ public class SingleShotGun : Gun
         }
     }
 
+    /// <summary>
+    /// 반동 꺼짐
+    /// </summary>
+    /// <param name="noise"></param>
+    /// <returns></returns>
     IEnumerator ResetRecoil(Cinemachine.CinemachineBasicMultiChannelPerlin noise)
     {
         float startingAmplitude = noise.m_AmplitudeGain;
@@ -247,6 +278,12 @@ public class SingleShotGun : Gun
         noise.m_FrequencyGain = 0f;
     }
 
+    /// <summary>
+    /// (네트워크) 총을 발사 했을때 알려주는 용도와 이펙트 생성 
+    /// </summary>
+    /// <param name="hitPosition"></param>
+    /// <param name="hitNormal"></param>
+    /// <param name="hitLayer"></param>
     [PunRPC]
     void RPC_Shoot(Vector3 hitPosition, Vector3 hitNormal, int hitLayer)
     {

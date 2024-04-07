@@ -7,6 +7,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 
+/// <summary>
+/// 총 쏘는 로직
+/// </summary>
 public class Shooter : MonoBehaviourPunCallbacks
 {
     public Text Ammo;
@@ -41,6 +44,9 @@ public class Shooter : MonoBehaviourPunCallbacks
         }
     }
 
+    /// <summary>
+    /// 인벤토리와, 발사 가능 한지 체크하고 실행
+    /// </summary>
     private void Update()
     {
         if (!PV.IsMine) return;
@@ -100,6 +106,9 @@ public class Shooter : MonoBehaviourPunCallbacks
         #endregion
     }
 
+    /// <summary>
+    /// 자동 인지 아닌지 UI업데이트
+    /// </summary>
     void ToggleGunFireMode()
     {
         // 배열 추가해서 무기에 현상 저장
@@ -119,6 +128,10 @@ public class Shooter : MonoBehaviourPunCallbacks
         }
     }
 
+    /// <summary>
+    /// 무기 체인지
+    /// </summary>
+    /// <param name="_index"></param>
     void EquipItem(int _index)
     {
         if (_index == previousItemIndex)
@@ -155,6 +168,9 @@ public class Shooter : MonoBehaviourPunCallbacks
         }
     }
 
+    /// <summary>
+    /// 무기의 총알을 저장 
+    /// </summary>
     private void InitializeItems()
     {
         for (int i = 0; i < items.Length; i++)
@@ -169,6 +185,10 @@ public class Shooter : MonoBehaviourPunCallbacks
         }
     }
 
+    /// <summary>
+    /// 무기 UI의 이미지 변경
+    /// </summary>
+    /// <param name="index"></param>
     void WeaponImage(int index)
     {
         // 이전에 활성화되었던 무기 이미지를 비활성화합니다.
@@ -181,6 +201,10 @@ public class Shooter : MonoBehaviourPunCallbacks
         weaponImage[index].SetActive(true);
     }
 
+    /// <summary>
+    /// 총알 업데이트 
+    /// </summary>
+    /// <param name="_index"></param>
     #region 총알 
     void ChangeWeapon(int _index)
     {
@@ -207,6 +231,9 @@ public class Shooter : MonoBehaviourPunCallbacks
         }
     }
 
+    /// <summary>
+    /// 재장전
+    /// </summary>
     void Reload()
     {
         if (items[itemIndex] is SingleShotGun gun)
@@ -218,6 +245,10 @@ public class Shooter : MonoBehaviourPunCallbacks
     }
     #endregion
 
+    /// <summary>
+    /// 현재 무기의 총알 수를 UI로 나타냄
+    /// </summary>
+    /// <param name="bulletCount"></param>
     #region 업데이트 확인 하는 함수
     public void UpdateBullets(int bulletCount)
     {
@@ -233,6 +264,11 @@ public class Shooter : MonoBehaviourPunCallbacks
         Ammo.text = currentBullets.ToString();
     }
 
+    /// <summary>
+    /// 무기가 바뀌는걸 통보하는 
+    /// </summary>
+    /// <param name="targetPlayer"></param>
+    /// <param name="changedProps"></param>
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
     {
         if (changedProps.ContainsKey("itemIndex") && !PV.IsMine && targetPlayer == PV.Owner)

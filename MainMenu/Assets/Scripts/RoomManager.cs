@@ -5,13 +5,16 @@ using Photon.Pun;
 using UnityEngine.SceneManagement;
 using System.IO;
 
+/// <summary>
+/// 룸 매니저 - 씬 넘어가면 플레이어 매니저 생성
+/// </summary>
 public class RoomManager : MonoBehaviourPunCallbacks
 {
     public static RoomManager Instance;
 
     private void Awake()
     {
-        // �̹� ������ ����� 
+        // 이미 있으면 지우고 
         if (Instance)
         {
             Destroy(gameObject);

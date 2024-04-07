@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// UI 끄고 켜기 
+/// </summary>
 public class Menu : MonoBehaviour
 {
     public string menuName;

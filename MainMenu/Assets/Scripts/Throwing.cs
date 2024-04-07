@@ -1,9 +1,11 @@
  using Photon.Pun;
 using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
+/// <summary>
+/// 수류탄률 던지는 로직
+/// </summary>
 public class Throwing : Grenade
 {
     [Header("References")]
@@ -39,6 +41,9 @@ public class Throwing : Grenade
         }
         countdown = _data.smokeDelay; // 폭발 딜레이 초기화
     }
+    /// <summary>
+    /// 플레이어에서 마우스 클릭시 호출되는 함수
+    /// </summary>
     public override void Use()
     {
         if (readyToThrow && PV.IsMine)
@@ -48,6 +53,10 @@ public class Throwing : Grenade
         }
     }
 
+    /// <summary>
+    /// (네트워크) 던지기
+    /// </summary>
+    /// <returns></returns>
     [PunRPC]
     private IEnumerator Throw()
     {
@@ -97,6 +106,5 @@ public class Throwing : Grenade
     private void ResetThrow()
     {
         readyToThrow = true; // 다시 던지기 가능하도록 플래그 설정
-        
     }
 }

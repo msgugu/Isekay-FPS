@@ -1,9 +1,11 @@
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
 
+/// <summary>
+/// 킬로그 만들기 위한 스크립트
+/// </summary>
 public class KillLogManager : MonoBehaviour
 {
     public static KillLogManager Instance;
@@ -24,6 +26,11 @@ public class KillLogManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 순회 하면서 플레이어 마다 생성
+    /// </summary>
+    /// <param name="killer"> 죽인 사람 </param>
+    /// <param name="victim"> 죽은 사람 </param>
     public void CreateKillLog(string killer, string victim)
     {
         foreach (Player player in PhotonNetwork.PlayerList)

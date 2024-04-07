@@ -2,9 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// ë©”ì¸ ë©”ë‰´ ê´€ë¦¬
+/// </summary>
 public class MenuManager : MonoBehaviour
 {
-    // ½Ì±ÛÅæ
+    
     public static MenuManager instance;
 
     [SerializeField] Menu[] menus;
@@ -13,36 +16,42 @@ public class MenuManager : MonoBehaviour
     {
         instance = this;
     }
-    
+    /// <summary>
+    /// ì„ íƒí•œ ë©”ë‰´ ì¼œê³  ë‚˜ë¨¸ì§€ ë‹¤ë„ê¸°
+    /// </summary>
+    /// <param name="menuName"></param>
     public void OpenMenu(string menuName)
     {
 
         for(int i = 0; i < menus.Length; i++)
         {
-            // ÀÎÀÚ·Î ¹ŞÀº ¸Ş´º ÀÌ¸§°ú ÇöÀç ¸Ş´ºÀÌ¸§ °ú °°´Ù¸é Å°°í
+            // ì¸ìë¡œ ë°›ì€ ë©”ë‰´ ì´ë¦„ê³¼ í˜„ì¬ ë©”ë‰´ì´ë¦„ ê³¼ ê°™ë‹¤ë©´ í‚¤ê³ 
             if (menus[i].menuName == menuName)
             {
                 menus[i].Open();
             }
-            // ¾Æ´Ï¸é ´Ù ²ô±â
+            // ì•„ë‹ˆë©´ ë‹¤ ë„ê¸°
             else if (menus[i].open)
             {
                 CloseMenu(menus[i]);
             }
         }
     }
-    // ÀÎ½ºÆåÅÍÃ¢¿¡ µé¾î°¡ÀÖ´Â ¸Ş´ºÁß 
+    /// <summary>
+    /// ì¸ìŠ¤í™í„°ì°½ì— ë“¤ì–´ê°€ìˆëŠ” ë©”ë‰´ì¤‘ 
+    /// </summary>
+    /// <param name="menu"></param>
     public void OpenMenu(Menu menu)
     {
         for (int i = 0; i < menus.Length; i++)
         {
-            // ¿­·ÁÀÖ´Â ¸Ş´ºÃ¢ ²ô°í
+            // ì—´ë ¤ìˆëŠ” ë©”ë‰´ì°½ ë„ê³ 
             if (menus[i].open)
             {
                 CloseMenu(menus[i]);
             }
         }
-        // ÀÎÀÚ·Î ¹ŞÀº ¸Ş´º¸¸ È°¼ºÈ­
+        // ì¸ìë¡œ ë°›ì€ ë©”ë‰´ë§Œ í™œì„±í™”
         menu.Open();
     }
 

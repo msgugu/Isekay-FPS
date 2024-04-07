@@ -8,7 +8,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
-
+/// <summary>
+/// 게임을 시작하고 특정 조건에 도달하면 게임이 끝나게함
+/// </summary>
 
 public class GameRule : MonoBehaviourPunCallbacks
 {
@@ -74,6 +76,9 @@ public class GameRule : MonoBehaviourPunCallbacks
         }
     }
 
+    /// <summary>
+    /// 게임이 시작할때 발동
+    /// </summary>
     void StartGame()
     {
         EnablePlayerControls();
@@ -92,6 +97,9 @@ public class GameRule : MonoBehaviourPunCallbacks
         // 게임이 시작되면 플레이어의 컨트롤을 다시 활성화합니다.
     }
 
+    /// <summary>
+    /// 시간 체크 
+    /// </summary>
     void CheckGameTime()
     {
         // 현재 시간에서 게임 시작 시간을 빼서, 설정된 게임 지속 시간을 초과했는지 검사합니다.
@@ -101,7 +109,9 @@ public class GameRule : MonoBehaviourPunCallbacks
             EndGame(); // 게임을 종료합니다.
         }
     }
-
+    /// <summary>
+    /// 킬 수를 체크 하는 함수
+    /// </summary>
     void CheckWinCondition()
     {
         // 모든 플레이어를 순회하며 킬 수를 체크합니다.
@@ -123,6 +133,9 @@ public class GameRule : MonoBehaviourPunCallbacks
         }
     }
 
+    /// <summary>
+    /// 특정 조건에 부합하면 게임을 끝내는 함수
+    /// </summary>
     void EndGame()
     {
         gameEnded = true; // 게임이 종료되었음을 표시합니다.
@@ -155,7 +168,10 @@ public class GameRule : MonoBehaviourPunCallbacks
         //PhotonNetwork.LoadLevel("ResultSceneName");
     }
 
-    // 게임 시작 전 플레이어의 컨트롤을 비활성화합니다.
+    /// <summary>
+    /// 게임 시작 전 플레이어의 컨트롤을 비활성화합니다.
+    /// </summary>
+    /// <returns></returns>
     IEnumerator DisablePlayerControlsDis()
     {
         yield return new WaitForSeconds(0.2f);
@@ -196,7 +212,10 @@ public class GameRule : MonoBehaviourPunCallbacks
         }
     }
 
-    // 게임이 시작되면 플레이어의 컨트롤을 활성화합니다.
+    
+    /// <summary>
+    /// 게임이 시작되면 플레이어의 컨트롤을 활성화
+    /// </summary>
     void EnablePlayerControls()
     {
         foreach (Player player in PhotonNetwork.PlayerList)

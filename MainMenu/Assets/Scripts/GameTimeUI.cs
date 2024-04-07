@@ -2,6 +2,9 @@ using UnityEngine;
 using System;
 using TMPro;
 
+/// <summary>
+/// 게임 시간 UI를 갱신시켜주는 UI
+/// </summary>
 public class GameTimeUI : MonoBehaviour
 {
     public GameRule gameRule; // GameRule 스크립트의 인스턴스를 참조합니다.

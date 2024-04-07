@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+/// <summary>
+/// 총 데이터 
+/// </summary>
 [CreateAssetMenu(menuName ="FPS/New Gun")]
 public class GunInfo : ItemInfo
 {

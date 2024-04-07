@@ -6,6 +6,9 @@ using TMPro;
 using Photon.Realtime;
 using System.Linq;
 
+/// <summary>
+/// í”„ë¡œí† íƒ€ì… UI
+/// </summary>
 public class Launcher : MonoBehaviourPunCallbacks
 {
 
@@ -27,31 +30,37 @@ public class Launcher : MonoBehaviourPunCallbacks
 
     void Start()
     {
-        // Æ÷Åæ¼­¹ö ¼ÂÆÃÇÑ°É »ç¿ëÇÏ´Â ÀÇ¹Ì
+        // í¬í†¤ì„œë²„ ì…‹íŒ…í•œê±¸ ì‚¬ìš©í•˜ëŠ” ì˜ë¯¸
         PhotonNetwork.ConnectUsingSettings();
     }
 
-    // ¼­¹ö ¿¬°á 
+    /// <summary>
+    /// ì„œë²„ ì—°ê²° 
+    /// </summary>
     public override void OnConnectedToMaster()
     {
-        Debug.Log("¼­¹öÀÔÀå");
+        Debug.Log("ì„œë²„ì…ì¥");
         PhotonNetwork.JoinLobby();
-        // ¾À µ¿±âÈ­ (¾À ÀÌµ¿ÇÒ¶§ °°ÀÌ µÇµµ·Ï ÇÏ´Â)
+        // ì”¬ ë™ê¸°í™” (ì”¬ ì´ë™í• ë•Œ ê°™ì´ ë˜ë„ë¡ í•˜ëŠ”)
         PhotonNetwork.AutomaticallySyncScene = true;
     }
 
-    // ·Îºñ ¿¬°á
+    /// <summary>
+    /// ë¡œë¹„ ì—°ê²°
+    /// </summary>
     public override void OnJoinedLobby()
     {
         MenuManager.instance.OpenMenu("title");
-        Debug.Log("·ÎºñÀÔÀå");
+        Debug.Log("ë¡œë¹„ì…ì¥");
         //PhotonNetwork.NickName = "Player " + Random.Range(0, 1000).ToString("0000");
     }
 
-    // ¹æ¸¸µå±â 
+    /// <summary>
+    /// ë°©ë§Œë“¤ê¸°
+    /// </summary>
     public void CreateRoom()
     {
-        // ¹æÀÌ¸§ ¾Æ¹«°Íµµ ¾øÀ¸¸é 
+        // ë°©ì´ë¦„ ì•„ë¬´ê²ƒë„ ì—†ìœ¼ë©´ 
         if (string.IsNullOrEmpty(roomNameInputField.text)) 
             return;
 
@@ -59,7 +68,9 @@ public class Launcher : MonoBehaviourPunCallbacks
         MenuManager.instance.OpenMenu("loading");
     }
 
-    // ¹æ¿¡ ÀÔÀåÇÏ¸é ÀÚµ¿À¸·Î ½ÇÇàÇÏ´Â ÇÔ¼ö 
+    /// <summary>
+    /// ë°©ì— ì…ì¥í•˜ë©´ ìë™ìœ¼ë¡œ ì‹¤í–‰í•˜ëŠ” í•¨ìˆ˜ 
+    /// </summary>
     public override void OnJoinedRoom()
     {
         MenuManager.instance.OpenMenu("room");
@@ -76,29 +87,41 @@ public class Launcher : MonoBehaviourPunCallbacks
         {
             Instantiate(playerListItemPrefab, playerListContent).GetComponent<PlayerListItem>().SetUp(players[i]);
         }
-        // È£½ºÆ®¸¸ ½ºÅ¸Æ® ¹öÆ° ¸¸µé±â
+        // í˜¸ìŠ¤íŠ¸ë§Œ ìŠ¤íƒ€íŠ¸ ë²„íŠ¼ ë§Œë“¤ê¸°
         startGameButton.SetActive(PhotonNetwork.IsMasterClient);
     }
-
+    /// <summary>
+    /// í˜¸ìŠ¤íŠ¸ ë³€ê²½ì‹œ ê²Œì„ ìŠ¤íƒ€íŠ¸ ë²„íŠ¸ ì¼œê¸°
+    /// </summary>
+    /// <param name="newMasterClient"></param>
     public override void OnMasterClientSwitched(Player newMasterClient)
     {
         startGameButton.SetActive(PhotonNetwork.IsMasterClient);
     }
 
-    // ¹æ¸¸µé±â ½ÇÆĞÇÏ¸é ¶ß´Â ¿¹¿Ü ÇÔ¼ö
+    /// <summary>
+    /// ë°©ë§Œë“¤ê¸° ì‹¤íŒ¨í•˜ë©´ ëœ¨ëŠ” ì˜ˆì™¸ í•¨ìˆ˜
+    /// </summary>
+    /// <param name="returnCode"></param>
+    /// <param name="message"></param>
     public override void OnCreateRoomFailed(short returnCode, string message)
     {
         errorText.text = "Room Creation Failed" + message;
         MenuManager.instance.OpenMenu("error");
     }
 
+    /// <summary>
+    /// ê²Œì„ì‹œì‘
+    /// </summary>
     public void StartGame()
     {
-        // Game Scene ºÒ·¯¿À±â
+        // Game Scene ë¶ˆëŸ¬ì˜¤ê¸°
         PhotonNetwork.LoadLevel(1);
     }
 
-    // ¹æ³ª°¡±â
+    /// <summary>
+    /// ë°©ë‚˜ê°€ê¸°
+    /// </summary>
     public void LeaveRoom()
     {
         PhotonNetwork.LeaveRoom();
@@ -110,12 +133,18 @@ public class Launcher : MonoBehaviourPunCallbacks
         PhotonNetwork.JoinRoom(info.Name);
         MenuManager.instance.OpenMenu("loading");
     }
-    // ¹æ³ª°¬À»¶§ È£ÃâµÈ´Â ÇÔ¼ö
+    /// <summary>
+    /// ë°©ë‚˜ê°”ì„ë•Œ í˜¸ì¶œë˜ëŠ” í•¨ìˆ˜
+    /// </summary>
     public override void OnLeftRoom()
     {
         MenuManager.instance.OpenMenu("title");
     }
 
+    /// <summary>
+    /// ë°© ë¦¬ìŠ¤íŠ¸ ì—…ë°ì´íŠ¸
+    /// </summary>
+    /// <param name="roomList"></param>
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
         foreach(Transform trans in roomListContent)
@@ -130,7 +159,10 @@ public class Launcher : MonoBehaviourPunCallbacks
         }
     }
 
-    // ·ë¿¡ ÇÃ·¹ÀÌ¾î ¸¸µé±â
+    /// <summary>
+    /// ë£¸ì— í”Œë ˆì´ì–´ ë§Œë“¤ê¸°
+    /// </summary>
+    /// <param name="newPlayer"></param>
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
         Instantiate(playerListItemPrefab, playerListContent).GetComponent<PlayerListItem>().SetUp(newPlayer);

@@ -3,20 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 
+/// <summary>
+/// 플레이어 미니맵
+/// </summary>
 public class MiniMap : MonoBehaviour
 {
     [SerializeField] GameObject my;
     [SerializeField] PhotonView isMine;
 
 
-    // Start is called before the first frame update
-    void Awake()
-    {
-    }
-
+    /// <summary>
+    /// 미니맵 활성화
+    /// </summary>
     private void Start()
     {
-        Debug.Log(isMine.IsMine);
         if(isMine.IsMine)
         {
             my.SetActive(true);
